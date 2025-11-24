@@ -626,7 +626,7 @@ document.addEventListener('DOMContentLoaded', function() {
         checkoutBtn.addEventListener('click', function() {
             const message = generateWhatsAppMessage();
             if (message) {
-                const whatsappNumber = '22607270982';
+                const whatsappNumber = getWhatsappNumber();
                 const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${message}`;
                 window.open(whatsappUrl, '_blank');
                 cartManager.clear();

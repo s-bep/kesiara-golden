@@ -137,7 +137,7 @@
                     </div>
 
                     <button class="btn-add-cart" onclick="addToCart(${product.id})">Ajouter au Panier</button>
-                    <a href="https://wa.me/22607270982?text=Je suis intéressé par ${encodeURIComponent(product.name)}" class="btn-whatsapp" style="display: block; text-align: center; text-decoration: none;">Commander par WhatsApp</a>
+                    <a id="whatsappLinkDetail" href="#" class="btn-whatsapp" style="display: block; text-align: center; text-decoration: none;">Commander par WhatsApp</a>
 
                     <div class="description-detail">
                         <h3 style="margin-bottom: 15px;">Description</h3>
@@ -147,12 +147,20 @@
             `;
 
             document.getElementById('productDetail').innerHTML = detail;
+            
+            // Mettre à jour le lien WhatsApp avec la configuration
+            const whatsappLink = document.getElementById('whatsappLinkDetail');
+            const whatsappNum = getWhatsappNumber();
+            whatsappLink.href = `https://wa.me/${whatsappNum}?text=${encodeURIComponent('Je suis intéressé par ' + product.name)}`;
+            
             loadRelatedProducts(product.category, product.id);
         }
 
         function loadRelatedProducts(category, excludeId) {
             const related = products.filter(p => p.category === category && p.id !== excludeId).slice(0, 4);
             const grid = document.getElementById('relatedProducts');
+            const whatsappNum = getWhatsappNumber();
+            
             grid.innerHTML = related.map(p => `
                 <div class="product-card">
                     <div class="product-image">
@@ -163,7 +171,7 @@
                     <p class="product-price">${formatPrice(p.price)}</p>
                     <div style="display: flex; gap: 10px; justify-content: center;">
                         <a href="product-detail.html?id=${p.id}" class="btn-view">Voir</a>
-                        <a href="https://wa.me/22607270982?text=Je suis intéressé par ${encodeURIComponent(p.name)}" class="btn-view" style="background: #25D366; color: white; border: none;">Commander</a>
+                        <a href="https://wa.me/${whatsappNum}?text=${encodeURIComponent('Je suis intéressé par ' + p.name)}" class="btn-view" style="background: #25D366; color: white; border: none;">Commander</a>
                     </div>
                 </div>
             `).join('');
@@ -201,6 +209,8 @@
             document.querySelector('.cart-count').textContent = count;
         }
     </script>
+    <script src="config.js"></script>
+    <script src="script.js"></script>
     <style>
         .container {
             max-width: 1200px;

@@ -248,6 +248,7 @@ function checkAuth() {
         loginScreen.style.display = 'none';
         adminPanel.style.display = 'block';
         loadProducts();
+        loadConfigUI();
     }
 }
 
@@ -540,5 +541,91 @@ function changePassword() {
             document.getElementById('confirmPassword').value = '';
         }
     }
+}
+
+// ============ CONFIGURATION FUNCTIONS ============
+
+function loadConfigUI() {
+    const config = configManager.getConfig();
+    
+    // WhatsApp & Contact
+    document.getElementById('whatsappNumber').value = config.whatsappNumber || '';
+    document.getElementById('whatsappMessage').value = config.whatsappMessage || '';
+    document.getElementById('phone').value = config.phone || '';
+    document.getElementById('email').value = config.email || '';
+    
+    // Taxes
+    document.getElementById('taxRate').value = config.taxRate || 18;
+    document.getElementById('shippingInfo').value = config.shippingInfo || '';
+    document.getElementById('deliveryTime').value = config.deliveryTime || '';
+    
+    // Texte
+    document.getElementById('siteName').value = config.siteName || '';
+    document.getElementById('siteTagline').value = config.siteTagline || '';
+    document.getElementById('homepageTitle').value = config.homepageTitle || '';
+    document.getElementById('homepageSubtitle').value = config.homepageSubtitle || '';
+    
+    // Logo & Branding
+    document.getElementById('logo').value = config.logo || '';
+    document.getElementById('address').value = config.address || '';
+    
+    // Prévisualisation logo
+    if (config.logo) {
+        document.getElementById('logoPreview').src = config.logo;
+        document.getElementById('logoPreview').style.display = 'block';
+    }
+}
+
+function saveContactConfig() {
+    const updates = {
+        whatsappNumber: document.getElementById('whatsappNumber').value,
+        whatsappMessage: document.getElementById('whatsappMessage').value,
+        phone: document.getElementById('phone').value,
+        email: document.getElementById('email').value,
+    };
+    
+    configManager.updateMultiple(updates);
+    showMessage('Configuration WhatsApp & Contact mise à jour! ✅', 'success');
+}
+
+function saveTaxConfig() {
+    const updates = {
+        taxRate: parseInt(document.getElementById('taxRate').value) || 18,
+        shippingInfo: document.getElementById('shippingInfo').value,
+        deliveryTime: document.getElementById('deliveryTime').value,
+    };
+    
+    configManager.updateMultiple(updates);
+    showMessage('Configuration Taxes & Livraison mise à jour! ✅', 'success');
+}
+
+function saveTextConfig() {
+    const updates = {
+        siteName: document.getElementById('siteName').value,
+        siteTagline: document.getElementById('siteTagline').value,
+        homepageTitle: document.getElementById('homepageTitle').value,
+        homepageSubtitle: document.getElementById('homepageSubtitle').value,
+    };
+    
+    configManager.updateMultiple(updates);
+    showMessage('Textes du site mis à jour! ✅ (Rafraîchissez le site pour voir les changements)', 'success');
+}
+
+function saveBrandConfig() {
+    const logoUrl = document.getElementById('logo').value;
+    const updates = {
+        logo: logoUrl,
+        address: document.getElementById('address').value,
+    };
+    
+    configManager.updateMultiple(updates);
+    
+    // Prévisualiser
+    if (logoUrl) {
+        document.getElementById('logoPreview').src = logoUrl;
+        document.getElementById('logoPreview').style.display = 'block';
+    }
+    
+    showMessage('Logo & Branding mis à jour! ✅ (Rafraîchissez le site pour voir les changements)', 'success');
 }
 
