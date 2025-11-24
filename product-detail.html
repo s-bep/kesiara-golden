@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détail Produit - Kesiara Golden</title>
+    <link rel="icon" type="image/png" href="Assets/LOGO.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="container">
+            <div style="display: flex; align-items: center; width: 100%;">
+                <div style="display: flex; align-items: center;">
+                    <img src="Assets/LOGO.png" alt="Logo" class="logo-nav">
+                    <a href="index.html" class="navbar-brand">KESIARA GOLDEN</a>
+                </div>
+                <div class="navbar-nav">
+                    <a href="index.html" class="nav-link">Accueil</a>
+                    <a href="products.html" class="nav-link">Collection</a>
+                    <a href="index.html#contact" class="nav-link">Contact</a>
+                    <a href="cart.html" class="cart-icon" style="position: relative; display: flex; align-items: center;">
+                        <i class="fas fa-shopping-bag"></i>
+                        <span class="cart-count">0</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- PRODUCT DETAIL -->
+    <section style="padding: 60px 0; min-height: calc(100vh - 100px);">
+        <div class="container">
+            <div class="product-detail" id="productDetail">
+                <!-- Filled by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- RELATED PRODUCTS -->
+    <section style="padding: 60px 0; background: #f8f8f8;">
+        <div class="container">
+            <h2 class="section-title">PRODUITS SIMILAIRES</h2>
+            <div class="products-grid" id="relatedProducts">
+                <!-- Filled by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>KESIARA GOLDEN</h3>
+                    <p style="font-size: 14px; color: #aaa; line-height: 1.8;">Bijoux d'exception en or massif.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>NAVIGATION</h3>
+                    <a href="index.html">Accueil</a>
+                    <a href="products.html">Collection</a>
+                    <a href="privacy.html">Confidentialité</a>
+                    <a href="terms.html">Conditions</a>
+                </div>
+                <div class="footer-section">
+                    <h3>CONTACT</h3>
+                    <a href="https://wa.me/22607270982">WhatsApp: +226 07 27 09 82</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Kesiara Golden. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- SCROLL TO TOP BUTTON -->
+    <button id="scrollTopBtn" style="position: fixed; bottom: 30px; right: 30px; width: 50px; height: 50px; background: #C9A961; color: white; border: none; border-radius: 50%; cursor: pointer; font-size: 24px; display: none; z-index: 999; transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(0,0,0,0.2);" onclick="scrollToTop()" title="Retour en haut">
+        ↑
+    </button>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadProductDetails();
+            updateCartCount();
+        });
+
+        window.addEventListener('scroll', function() {
+            const btn = document.getElementById('scrollTopBtn');
+            if (window.pageYOffset > 300) {
+                btn.style.display = 'block';
+            } else {
+                btn.style.display = 'none';
+            }
+        });
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function loadProductDetails() {
+            const id = new URLSearchParams(window.location.search).get('id');
+            const product = products.find(p => p.id == id);
+
+            if (!product) {
+                document.getElementById('productDetail').innerHTML = '<p>Produit non trouvé</p>';
+                return;
+            }
+
+            const detail = `
+                <div class="product-gallery">
+                    <div class="main-image">
+                        <img id="mainImage" src="${product.image}" alt="${product.name}">
+                    </div>
+                    <div class="thumbnails">
+                        <div class="thumbnail" onclick="document.getElementById('mainImage').src='${product.image}'">
+                            <img src="${product.image}" alt="">
+                        </div>
+                    </div>
+                </div>
+                <div class="product-info">
+                    <h1>${product.name}</h1>
+                    <div class="product-specs">
+                        <span><strong>Catégorie:</strong> ${product.category}</span>
+                        <span><strong>Genre:</strong> ${product.gender}</span>
+                        <span><strong>Matière:</strong> ${product.material}</span>
+                        <span><strong>Poids:</strong> ${product.weight}</span>
+                        <span><strong>Dimensions:</strong> ${product.dimensions}</span>
+                    </div>
+                    <div class="price-detail">${formatPrice(product.price)}</div>
+                    
+                    <div class="quantity-selector">
+                        <label>Quantité:</label>
+                        <input type="number" id="quantity" value="1" min="1" max="${product.stock}">
+                    </div>
+
+                    <button class="btn-add-cart" onclick="addToCart(${product.id})">Ajouter au Panier</button>
+                    <a href="https://wa.me/22607270982?text=Je suis intéressé par ${encodeURIComponent(product.name)}" class="btn-whatsapp" style="display: block; text-align: center; text-decoration: none;">Commander par WhatsApp</a>
+
+                    <div class="description-detail">
+                        <h3 style="margin-bottom: 15px;">Description</h3>
+                        <p>${product.description}</p>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('productDetail').innerHTML = detail;
+            loadRelatedProducts(product.category, product.id);
+        }
+
+        function loadRelatedProducts(category, excludeId) {
+            const related = products.filter(p => p.category === category && p.id !== excludeId).slice(0, 4);
+            const grid = document.getElementById('relatedProducts');
+            grid.innerHTML = related.map(p => `
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="${p.image}" alt="${p.name}">
+                    </div>
+                    <h3 class="product-name">${p.name}</h3>
+                    <p class="product-material">${p.material}</p>
+                    <p class="product-price">${formatPrice(p.price)}</p>
+                    <div style="display: flex; gap: 10px; justify-content: center;">
+                        <a href="product-detail.html?id=${p.id}" class="btn-view">Voir</a>
+                        <a href="https://wa.me/22607270982?text=Je suis intéressé par ${encodeURIComponent(p.name)}" class="btn-view" style="background: #25D366; color: white; border: none;">Commander</a>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function addToCart(productId) {
+            const quantity = parseInt(document.getElementById('quantity').value) || 1;
+            const product = products.find(p => p.id === productId);
+            
+            let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            const existing = cart.find(item => item.id === productId);
+
+            if (existing) {
+                existing.quantity += quantity;
+            } else {
+                cart.push({
+                    id: productId,
+                    name: product.name,
+                    price: product.price,
+                    image: product.image,
+                    material: product.material,
+                    quantity: quantity
+                });
+            }
+
+            localStorage.setItem('cart', JSON.stringify(cart));
+            alert('Produit ajouté au panier!');
+            updateCartCount();
+            window.location.href = 'cart.html';
+        }
+
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.querySelector('.cart-count').textContent = count;
+        }
+    </script>
+    <style>
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+    </style>
+</body>
+</html>

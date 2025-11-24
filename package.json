@@ -1,0 +1,15 @@
+{
+  "name": "kesiara-golden",
+  "version": "2.0.0",
+  "description": "Site e-commerce bijoux luxe - Kesiara Golden",
+  "main": "index.html",
+  "scripts": {
+    "start": "echo 'Site statique - ouvrez index.html dans votre navigateur'"
+  },
+  "keywords": ["bijoux", "or", "e-commerce", "luxury", "kesiara", "burkina"],
+  "author": "Kesiara Golden",
+  "license": "proprietary",
+  "engines": {
+    "node": "18.x"
+  }
+}

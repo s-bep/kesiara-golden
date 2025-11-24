@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panier - Kesiara Golden</title>
+    <link rel="icon" type="image/png" href="Assets/LOGO.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="container">
+            <div style="display: flex; align-items: center; width: 100%;">
+                <div style="display: flex; align-items: center;">
+                    <img src="Assets/LOGO.png" alt="Logo" class="logo-nav">
+                    <a href="index.html" class="navbar-brand">KESIARA GOLDEN</a>
+                </div>
+                <div class="navbar-nav">
+                    <a href="index.html" class="nav-link">Accueil</a>
+                    <a href="products.html" class="nav-link">Collection</a>
+                    <a href="index.html#contact" class="nav-link">Contact</a>
+                    <a href="cart.html" class="cart-icon" style="position: relative; display: flex; align-items: center;">
+                        <i class="fas fa-shopping-bag"></i>
+                        <span class="cart-count">0</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- CART PAGE -->
+    <section class="cart-container">
+        <div class="container">
+            <h1 class="section-title" style="margin-bottom: 50px;">VOTRE PANIER</h1>
+
+            <table class="cart-table" id="cartTable">
+                <thead>
+                    <tr>
+                        <th>Produit</th>
+                        <th>Matière</th>
+                        <th>Prix</th>
+                        <th>Quantité</th>
+                        <th>Sous-total</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="cartItems">
+                    <!-- Filled by JavaScript -->
+                </tbody>
+            </table>
+
+            <div class="cart-summary">
+                <div>
+                    <button onclick="window.location.href='products.html'" class="btn-view" style="width: 100%; padding: 15px; background: #1a1a1a; color: white; border: none; cursor: pointer; margin-top: 20px;">Continuer les achats</button>
+                </div>
+                <div class="summary-box">
+                    <div class="summary-line">
+                        <span>Sous-total:</span>
+                        <span id="subtotal">0 XOF</span>
+                    </div>
+                    <div class="summary-line">
+                        <span>TVA (18%):</span>
+                        <span id="tax">0 XOF</span>
+                    </div>
+                    <div class="summary-line total">
+                        <span>Total:</span>
+                        <span id="total">0 XOF</span>
+                    </div>
+                    <button class="btn-checkout" onclick="checkoutWhatsApp()">Passer Commande</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>KESIARA GOLDEN</h3>
+                    <p style="font-size: 14px; color: #aaa; line-height: 1.8;">Bijoux d'exception en or massif.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>NAVIGATION</h3>
+                    <a href="index.html">Accueil</a>
+                    <a href="products.html">Collection</a>
+                    <a href="privacy.html">Confidentialité</a>
+                    <a href="terms.html">Conditions</a>
+                </div>
+                <div class="footer-section">
+                    <h3>CONTACT</h3>
+                    <a href="https://wa.me/22607270982">WhatsApp: +226 07 27 09 82</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Kesiara Golden. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- SCROLL TO TOP BUTTON -->
+    <button id="scrollTopBtn" style="position: fixed; bottom: 30px; right: 30px; width: 50px; height: 50px; background: #C9A961; color: white; border: none; border-radius: 50%; cursor: pointer; font-size: 24px; display: none; z-index: 999; transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(0,0,0,0.2);" onclick="scrollToTop()" title="Retour en haut">
+        ↑
+    </button>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            displayCart();
+            updateCartCount();
+        });
+
+        window.addEventListener('scroll', function() {
+            const btn = document.getElementById('scrollTopBtn');
+            if (window.pageYOffset > 300) {
+                btn.style.display = 'block';
+            } else {
+                btn.style.display = 'none';
+            }
+        });
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function displayCart() {
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            const cartItems = document.getElementById('cartItems');
+
+            if (cart.length === 0) {
+                cartItems.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 40px;">Votre panier est vide</td></tr>`;
+                document.querySelector('.cart-summary').style.display = 'none';
+                return;
+            }
+
+            cartItems.innerHTML = cart.map(item => `
+                <tr>
+                    <td>
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <div class="cart-item-image">
+                                <img src="${item.image}" alt="">
+                            </div>
+                            <span>${item.name}</span>
+                        </div>
+                    </td>
+                    <td>${item.material}</td>
+                    <td>${formatPrice(item.price)}</td>
+                    <td>
+                        <input type="number" value="${item.quantity}" min="1" 
+                            onchange="updateQuantity(${item.id}, this.value)" 
+                            style="width: 60px; padding: 8px; border: 1px solid #e5e5e5;">
+                    </td>
+                    <td>${formatPrice(item.price * item.quantity)}</td>
+                    <td>
+                        <button onclick="removeFromCart(${item.id})" 
+                            style="background: none; border: none; color: #C9A961; cursor: pointer; font-size: 18px;">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+
+            updateSummary();
+        }
+
+        function updateSummary() {
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const tax = subtotal * 0.18;
+            const total = subtotal + tax;
+
+            document.getElementById('subtotal').textContent = formatPrice(subtotal);
+            document.getElementById('tax').textContent = formatPrice(tax);
+            document.getElementById('total').textContent = formatPrice(total);
+        }
+
+        function updateQuantity(productId, quantity) {
+            let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            const item = cart.find(p => p.id === productId);
+            if (item) {
+                item.quantity = parseInt(quantity);
+                localStorage.setItem('cart', JSON.stringify(cart));
+                displayCart();
+            }
+        }
+
+        function removeFromCart(productId) {
+            let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            cart = cart.filter(item => item.id !== productId);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            displayCart();
+            updateCartCount();
+        }
+
+        function checkoutWhatsApp() {
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            if (cart.length === 0) {
+                alert('Votre panier est vide');
+                return;
+            }
+
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const tax = subtotal * 0.18;
+            const total = subtotal + tax;
+
+            let message = `*Commande Kesiara Golden*\n\n`;
+            message += `*Produits:*\n`;
+            cart.forEach(item => {
+                message += `• ${item.name} (${item.material})\n`;
+                message += `  Qty: ${item.quantity} x ${formatPrice(item.price)} = ${formatPrice(item.price * item.quantity)}\n`;
+            });
+            message += `\n*Sous-total:* ${formatPrice(subtotal)}\n`;
+            message += `*TVA (18%):* ${formatPrice(tax)}\n`;
+            message += `*TOTAL:* ${formatPrice(total)}\n\n`;
+            message += `Veuillez confirmer ma commande.`;
+
+            const url = `https://wa.me/22607270982?text=${encodeURIComponent(message)}`;
+            window.open(url, '_blank');
+        }
+
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.querySelector('.cart-count').textContent = count;
+        }
+    </script>
+    <style>
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+    </style>
+</body>
+</html>

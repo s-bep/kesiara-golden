@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Kesiara Golden</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Lato', sans-serif;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+        }
+
+        body {
+            background-color: #f8f8f8;
+            color: #1a1a1a;
+        }
+
+        .navbar {
+            background-color: #1a1a1a;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .navbar-brand {
+            font-size: 28px;
+            font-weight: 600;
+            color: #C9A961 !important;
+        }
+
+        .btn-primary {
+            background-color: #1a1a1a;
+            border-color: #1a1a1a;
+            font-size: 16px;
+            padding: 12px 24px;
+        }
+
+        .btn-primary:hover {
+            background-color: #C9A961;
+            border-color: #C9A961;
+            color: #1a1a1a;
+        }
+
+        .btn-danger {
+            font-size: 14px;
+        }
+
+        .btn-warning {
+            font-size: 14px;
+        }
+
+        .card {
+            border: none;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-radius: 8px;
+        }
+
+        .card-header {
+            background-color: #1a1a1a;
+            color: #C9A961;
+            border: none;
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        .form-control, .form-select {
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            padding: 10px 12px;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: #C9A961;
+            box-shadow: 0 0 0 0.2rem rgba(201, 169, 97, 0.25);
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #1a1a1a;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .table {
+            font-size: 14px;
+        }
+
+        .table thead {
+            background-color: #f0f0f0;
+        }
+
+        .table th {
+            color: #1a1a1a;
+            font-weight: 600;
+            border-color: #ddd;
+        }
+
+        .product-image {
+            max-width: 80px;
+            max-height: 80px;
+            border-radius: 6px;
+            object-fit: cover;
+        }
+
+        .badge {
+            font-size: 12px;
+            padding: 6px 12px;
+        }
+
+        .alert {
+            border-radius: 6px;
+            border: none;
+            font-size: 14px;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .tab-content {
+            background-color: white;
+            border-radius: 0 0 8px 8px;
+            padding: 30px;
+        }
+
+        .nav-tabs .nav-link {
+            color: #8b8b8b;
+            border: none;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .nav-tabs .nav-link.active {
+            color: #1a1a1a;
+            background-color: white;
+            border: none;
+            border-bottom: 3px solid #C9A961;
+        }
+
+        .nav-tabs {
+            background-color: #f8f8f8;
+            border-radius: 8px 8px 0 0;
+            border: none;
+            padding: 10px;
+        }
+
+        .logout-btn {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .logout-btn:hover {
+            background-color: #c82333;
+        }
+
+        .container-admin {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .product-card-body {
+            padding: 15px;
+        }
+
+        .product-card-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1a1a1a;
+        }
+
+        .product-card-price {
+            font-size: 16px;
+            font-weight: 700;
+            color: #C9A961;
+            margin-bottom: 10px;
+        }
+
+        .product-card-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .product-card-actions button {
+            flex: 1;
+            padding: 8px;
+            font-size: 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .btn-edit-card {
+            background-color: #ffc107;
+            color: #1a1a1a;
+        }
+
+        .btn-delete-card {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .login-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+        }
+
+        .login-card {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .login-card h2 {
+            color: #1a1a1a;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 28px;
+        }
+
+        .login-card .form-control {
+            margin-bottom: 15px;
+        }
+
+        .login-card .btn-primary {
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .featured-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #C9A961;
+            color: #1a1a1a;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .product-card {
+            position: relative;
+        }
+
+        .modal-header {
+            background-color: #1a1a1a;
+            color: white;
+        }
+
+        .modal-header .btn-close {
+            filter: invert(1);
+        }
+    </style>
+</head>
+<body>
+    <div id="loginScreen" class="login-container" style="display: none;">
+        <div class="login-card">
+            <h2>Admin Kesiara</h2>
+            <div class="form-group">
+                <label class="form-label">Mot de passe</label>
+                <input type="password" id="passwordInput" class="form-control" placeholder="Entrez le mot de passe">
+            </div>
+            <button onclick="login()" class="btn btn-primary w-100">Connexion</button>
+            <p id="loginError" class="alert alert-danger mt-3" style="display: none;">Mot de passe incorrect</p>
+        </div>
+    </div>
+
+    <div id="adminPanel" style="display: none;">
+        <!-- Navbar -->
+        <nav class="navbar navbar-dark">
+            <div class="container-fluid">
+                <span class="navbar-brand">Kesiara Golden - Admin</span>
+                <button class="logout-btn" onclick="logout()">Déconnexion</button>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="container-admin">
+            <div id="successMessage" class="alert alert-success" style="display: none;"></div>
+            <div id="errorMessage" class="alert alert-danger" style="display: none;"></div>
+
+            <!-- Tabs -->
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" data-bs-toggle="tab" href="#productsTab">Mes Produits</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#addProductTab">Ajouter Produit</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#settingsTab">Paramètres</a>
+                </li>
+            </ul>
+
+            <!-- Tab Content -->
+            <div class="tab-content">
+                <!-- Products List Tab -->
+                <div id="productsTab" class="tab-pane fade show active">
+                    <h3 class="mb-4">Liste des Produits</h3>
+                    <div id="productsContainer" class="products-grid"></div>
+                </div>
+
+                <!-- Add Product Tab -->
+                <div id="addProductTab" class="tab-pane fade">
+                    <h3 class="mb-4">Ajouter un Nouveau Produit</h3>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <form id="productForm">
+                                <div class="mb-3">
+                                    <label class="form-label">Nom du Produit</label>
+                                    <input type="text" id="productName" class="form-control" required>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Catégorie</label>
+                                        <select id="productCategory" class="form-select" required>
+                                            <option value="">Sélectionnez une catégorie</option>
+                                            <option value="Colliers">Colliers</option>
+                                            <option value="Boucles d'oreilles">Boucles d'oreilles</option>
+                                            <option value="Bracelets">Bracelets</option>
+                                            <option value="Bagues">Bagues</option>
+                                            <option value="Ensembles">Ensembles</option>
+                                            <option value="Chaînes">Chaînes</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Genre</label>
+                                        <select id="productGender" class="form-select" required>
+                                            <option value="">Sélectionnez un genre</option>
+                                            <option value="Femme">Femme</option>
+                                            <option value="Homme">Homme</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Matériau</label>
+                                        <input type="text" id="productMaterial" class="form-control" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Prix (CFA)</label>
+                                        <input type="number" id="productPrice" class="form-control" required>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Poids</label>
+                                        <input type="text" id="productWeight" class="form-control" placeholder="ex: 2.5g">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Dimensions</label>
+                                        <input type="text" id="productDimensions" class="form-control" placeholder="ex: 45cm">
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Stock</label>
+                                        <input type="number" id="productStock" class="form-control" value="5" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Image Principal (URL)</label>
+                                        <input type="text" id="productImage" class="form-control" required placeholder="https://...">
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Description</label>
+                                    <textarea id="productDescription" class="form-control" rows="4" required></textarea>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">
+                                        <input type="checkbox" id="productFeatured"> Produit en vedette
+                                    </label>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">Ajouter le Produit</button>
+                            </form>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header">Conseils</div>
+                                <div class="card-body">
+                                    <p><strong>Image URL:</strong> Utilisez Unsplash. Exemples:</p>
+                                    <small>
+                                        <div class="mb-2">Collier: photo-1599643478518</div>
+                                        <div class="mb-2">Boucles: photo-1611591437281</div>
+                                        <div class="mb-2">Bracelet: photo-1515562141207</div>
+                                    </small>
+                                    <p class="mt-3"><strong>Format complet:</strong></p>
+                                    <code style="font-size: 11px;">https://images.unsplash.com/photo-ID?w=500&h=500&fit=crop</code>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Settings Tab -->
+                <div id="settingsTab" class="tab-pane fade">
+                    <h3 class="mb-4">Paramètres</h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">Données</div>
+                                <div class="card-body">
+                                    <p>Gérez vos données sauvegardées localement.</p>
+                                    <button class="btn btn-primary" onclick="downloadData()">
+                                        <i class="fas fa-download"></i> Télécharger les données
+                                    </button>
+                                    <button class="btn btn-warning mt-2" onclick="resetProducts()">
+                                        <i class="fas fa-redo"></i> Réinitialiser les produits
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <div class="card-header">Sécurité</div>
+                                <div class="card-body">
+                                    <p>Changez le mot de passe administrateur.</p>
+                                    <div class="form-group mb-3">
+                                        <label class="form-label">Nouveau mot de passe</label>
+                                        <input type="password" id="newPassword" class="form-control">
+                                    </div>
+                                    <button class="btn btn-primary" onclick="changePassword()">Changer le mot de passe</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Modifier le Produit</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editProductForm">
+                        <input type="hidden" id="editProductId">
+                        <div class="mb-3">
+                            <label class="form-label">Nom du Produit</label>
+                            <input type="text" id="editProductName" class="form-control" required>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Catégorie</label>
+                                <select id="editProductCategory" class="form-select" required>
+                                    <option value="Colliers">Colliers</option>
+                                    <option value="Boucles d'oreilles">Boucles d'oreilles</option>
+                                    <option value="Bracelets">Bracelets</option>
+                                    <option value="Bagues">Bagues</option>
+                                    <option value="Ensembles">Ensembles</option>
+                                    <option value="Chaînes">Chaînes</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Genre</label>
+                                <select id="editProductGender" class="form-select" required>
+                                    <option value="Femme">Femme</option>
+                                    <option value="Homme">Homme</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Matériau</label>
+                                <input type="text" id="editProductMaterial" class="form-control" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Prix (CFA)</label>
+                                <input type="number" id="editProductPrice" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Poids</label>
+                                <input type="text" id="editProductWeight" class="form-control">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Dimensions</label>
+                                <input type="text" id="editProductDimensions" class="form-control">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Stock</label>
+                                <input type="number" id="editProductStock" class="form-control" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Image (URL)</label>
+                                <input type="text" id="editProductImage" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Description</label>
+                            <textarea id="editProductDescription" class="form-control" rows="4" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">
+                                <input type="checkbox" id="editProductFeatured"> Produit en vedette
+                            </label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-primary" onclick="saveEditedProduct()">Enregistrer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>

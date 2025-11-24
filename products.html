@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collection - Kesiara Golden</title>
+    <meta name="description" content="Collection complète de bijoux en or 18K et plaqué or pour femmes et hommes.">
+    <link rel="icon" type="image/png" href="Assets/LOGO.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="container">
+            <div style="display: flex; align-items: center; width: 100%;">
+                <div style="display: flex; align-items: center;">
+                    <img src="Assets/LOGO.png" alt="Logo" class="logo-nav">
+                    <a href="index.html" class="navbar-brand">KESIARA GOLDEN</a>
+                </div>
+                <div class="navbar-nav">
+                    <a href="index.html" class="nav-link">Accueil</a>
+                    <a href="products.html" class="nav-link">Collection</a>
+                    <a href="index.html#contact" class="nav-link">Contact</a>
+                    <a href="cart.html" class="cart-icon" style="position: relative; display: flex; align-items: center;">
+                        <i class="fas fa-shopping-bag"></i>
+                        <span class="cart-count">0</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- PRODUCTS PAGE -->
+    <section class="products-page">
+        <div class="container">
+            <h1 class="section-title" style="margin-bottom: 50px;">COLLECTION COMPLÈTE</h1>
+
+            <!-- FILTERS -->
+            <div class="filters-sidebar">
+                <div class="filter-group">
+                    <label>Catégorie</label>
+                    <select id="categoryFilter">
+                        <option value="">Toutes</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Sexe</label>
+                    <select id="genderFilter">
+                        <option value="">Tous</option>
+                        <option value="Femme">Femme</option>
+                        <option value="Homme">Homme</option>
+                        <option value="Unisexe">Unisexe</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Matière</label>
+                    <select id="materialFilter">
+                        <option value="">Toutes</option>
+                        <option value="Or 18K">Or 18K</option>
+                        <option value="Or 14K">Or 14K</option>
+                        <option value="Plaqué Or">Plaqué Or</option>
+                        <option value="Or blanc">Or blanc</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Tri</label>
+                    <select id="sortFilter">
+                        <option value="">Défaut</option>
+                        <option value="price-asc">Prix: Bas au Haut</option>
+                        <option value="price-desc">Prix: Haut au Bas</option>
+                        <option value="name">Alphabétique</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- PRODUCTS GRID -->
+            <div class="products-grid" id="productsGrid">
+                <!-- Filled by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>KESIARA GOLDEN</h3>
+                    <p style="font-size: 14px; color: #aaa; line-height: 1.8;">Bijoux d'exception en or massif.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>NAVIGATION</h3>
+                    <a href="index.html">Accueil</a>
+                    <a href="products.html">Collection</a>
+                    <a href="privacy.html">Confidentialité</a>
+                    <a href="terms.html">Conditions</a>
+                </div>
+                <div class="footer-section">
+                    <h3>CONTACT</h3>
+                    <a href="https://wa.me/22607270982">WhatsApp: +226 07 27 09 82</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Kesiara Golden. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- SCROLL TO TOP BUTTON -->
+    <button id="scrollTopBtn" style="position: fixed; bottom: 30px; right: 30px; width: 50px; height: 50px; background: #C9A961; color: white; border: none; border-radius: 50%; cursor: pointer; font-size: 24px; display: none; z-index: 999; transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(0,0,0,0.2);" onclick="scrollToTop()" title="Retour en haut">
+        ↑
+    </button>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            setupFilters();
+            loadAllProducts();
+            updateCartCount();
+
+            document.getElementById('categoryFilter').addEventListener('change', loadAllProducts);
+            document.getElementById('genderFilter').addEventListener('change', loadAllProducts);
+            document.getElementById('materialFilter').addEventListener('change', loadAllProducts);
+            document.getElementById('sortFilter').addEventListener('change', loadAllProducts);
+        });
+
+        window.addEventListener('scroll', function() {
+            const btn = document.getElementById('scrollTopBtn');
+            if (window.pageYOffset > 300) {
+                btn.style.display = 'block';
+            } else {
+                btn.style.display = 'none';
+            }
+        });
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function setupFilters() {
+            const categories = [...new Set(products.map(p => p.category))];
+            const categorySelect = document.getElementById('categoryFilter');
+            categories.forEach(cat => {
+                const option = document.createElement('option');
+                option.value = cat;
+                option.textContent = cat;
+                categorySelect.appendChild(option);
+            });
+        }
+
+        function loadAllProducts() {
+            const filters = {
+                category: document.getElementById('categoryFilter').value,
+                gender: document.getElementById('genderFilter').value,
+                material: document.getElementById('materialFilter').value,
+                sort: document.getElementById('sortFilter').value
+            };
+
+            let filtered = products.filter(p => {
+                if (filters.category && p.category !== filters.category) return false;
+                if (filters.gender && p.gender !== filters.gender) return false;
+                if (filters.material && p.material !== filters.material) return false;
+                return true;
+            });
+
+            if (filters.sort === 'price-asc') filtered.sort((a, b) => a.price - b.price);
+            if (filters.sort === 'price-desc') filtered.sort((a, b) => b.price - a.price);
+            if (filters.sort === 'name') filtered.sort((a, b) => a.name.localeCompare(b.name));
+
+            const grid = document.getElementById('productsGrid');
+            grid.innerHTML = filtered.map(p => `
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="${p.image}" alt="${p.name}">
+                    </div>
+                    <h3 class="product-name">${p.name}</h3>
+                    <p class="product-material">${p.material}</p>
+                    <p class="product-price">${formatPrice(p.price)}</p>
+                    <div style="display: flex; gap: 10px; justify-content: center;">
+                        <a href="product-detail.html?id=${p.id}" class="btn-view">Voir</a>
+                        <a href="https://wa.me/22607270982?text=Je suis intéressé par ${encodeURIComponent(p.name)}" class="btn-view" style="background: #25D366; color: white; border: none;">Commander</a>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.querySelector('.cart-count').textContent = count;
+        }
+    </script>
+    <style>
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+    </style>
+</body>
+</html>
