@@ -1,0 +1,8 @@
+/*
+    This rewrites all routes requests to the root index.html file
+    (ignoring files requests). This allows you to use client side routing.
+*/
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
