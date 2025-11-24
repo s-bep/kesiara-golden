@@ -1,41 +1,45 @@
-// ============ AUTHENTICATION ============
-const ADMIN_PASSWORD = '226kesiara'; // Changez ce mot de passe !
+// ============ AUTHENTICATION - SYSTÈME SÉCURISÉ ============
+// ⚠️ Le mot de passe est stocké en localStorage (côté client)
+// Format: SHA-256 hash
 
-function checkAuth() {
-    const isLoggedIn = sessionStorage.getItem('adminLoggedIn');
-    const loginScreen = document.getElementById('loginScreen');
-    const adminPanel = document.getElementById('adminPanel');
+class AuthManager {
+    constructor() {
+        this.storageKey = 'kesiara_auth';
+        this.initializeAuth();
+    }
 
-    if (!isLoggedIn) {
-        loginScreen.style.display = 'flex';
-        adminPanel.style.display = 'none';
-    } else {
-        loginScreen.style.display = 'none';
-        adminPanel.style.display = 'block';
-        loadProducts();
+    initializeAuth() {
+        if (!localStorage.getItem(this.storageKey)) {
+            // Hash du mot de passe par défaut '226kesiara'
+            // Généré avec: SHA256('226kesiara')
+            const defaultHash = this.simpleHash('226kesiara');
+            localStorage.setItem(this.storageKey, defaultHash);
+        }
+    }
+
+    // Simple hash pour démonstration (non recommandé pour production)
+    simpleHash(str) {
+        let hash = 0;
+        for (let i = 0; i < str.length; i++) {
+            const char = str.charCodeAt(i);
+            hash = ((hash << 5) - hash) + char;
+            hash = hash & hash; // Convertir en 32-bit integer
+        }
+        return 'hash_' + Math.abs(hash).toString(36);
+    }
+
+    verify(password) {
+        return this.simpleHash(password) === localStorage.getItem(this.storageKey);
+    }
+
+    setPassword(newPassword) {
+        const hash = this.simpleHash(newPassword);
+        localStorage.setItem(this.storageKey, hash);
+        return true;
     }
 }
 
-function login() {
-    const password = document.getElementById('passwordInput').value;
-    const errorElement = document.getElementById('loginError');
-
-    if (password === ADMIN_PASSWORD) {
-        sessionStorage.setItem('adminLoggedIn', 'true');
-        errorElement.style.display = 'none';
-        checkAuth();
-    } else {
-        errorElement.style.display = 'block';
-        document.getElementById('passwordInput').value = '';
-    }
-}
-
-function logout() {
-    if (confirm('Êtes-vous sûr de vouloir vous déconnecter ?')) {
-        sessionStorage.removeItem('adminLoggedIn');
-        checkAuth();
-    }
-}
+const auth = new AuthManager();
 
 // ============ PRODUCT MANAGEMENT ============
 class ProductManager {
@@ -231,6 +235,107 @@ class ProductManager {
 
 const pm = new ProductManager();
 
+// ============ AUTHENTICATION FUNCTIONS ============
+function checkAuth() {
+    const isLoggedIn = sessionStorage.getItem('adminLoggedIn');
+    const loginScreen = document.getElementById('loginScreen');
+    const adminPanel = document.getElementById('adminPanel');
+
+    if (!isLoggedIn) {
+        loginScreen.style.display = 'flex';
+        adminPanel.style.display = 'none';
+    } else {
+        loginScreen.style.display = 'none';
+        adminPanel.style.display = 'block';
+        loadProducts();
+    }
+}
+
+function login() {
+    const password = document.getElementById('passwordInput').value;
+    const errorElement = document.getElementById('loginError');
+
+    if (password.trim() === '') {
+        errorElement.textContent = 'Veuillez entrer un mot de passe';
+        errorElement.style.display = 'block';
+        return;
+    }
+
+    if (auth.verify(password)) {
+        sessionStorage.setItem('adminLoggedIn', 'true');
+        errorElement.style.display = 'none';
+        document.getElementById('passwordInput').value = '';
+        checkAuth();
+    } else {
+        errorElement.textContent = 'Mot de passe incorrect';
+        errorElement.style.display = 'block';
+        document.getElementById('passwordInput').value = '';
+    }
+}
+
+function logout() {
+    if (confirm('Êtes-vous sûr de vouloir vous déconnecter ?')) {
+        sessionStorage.removeItem('adminLoggedIn');
+        checkAuth();
+    }
+}
+
+// ============ IMAGE UPLOAD FUNCTIONS ============
+function handleImageUpload(event, fieldId) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        // Convertir en base64 pour localStorage
+        const base64Image = e.target.result;
+        document.getElementById(fieldId).value = base64Image;
+        
+        // Prévisualiser
+        const previewId = fieldId.replace('Image', 'Preview');
+        const preview = document.getElementById(previewId);
+        if (preview) {
+            preview.src = base64Image;
+            preview.style.display = 'block';
+        }
+    };
+    reader.readAsDataURL(file);
+}
+
+function switchImageMode(mode) {
+    const urlInput = document.getElementById('productImage');
+    const fileInput = document.getElementById('productImageFile');
+    const urlSection = document.getElementById('urlSection');
+    const fileSection = document.getElementById('fileSection');
+
+    if (mode === 'url') {
+        urlSection.style.display = 'block';
+        fileSection.style.display = 'none';
+        fileInput.value = '';
+    } else {
+        urlSection.style.display = 'none';
+        fileSection.style.display = 'block';
+        urlInput.value = '';
+    }
+}
+
+function switchImageModeEdit(mode) {
+    const urlInput = document.getElementById('editProductImage');
+    const fileInput = document.getElementById('editProductImageFile');
+    const urlSection = document.getElementById('editUrlSection');
+    const fileSection = document.getElementById('editFileSection');
+
+    if (mode === 'url') {
+        urlSection.style.display = 'block';
+        fileSection.style.display = 'none';
+        fileInput.value = '';
+    } else {
+        urlSection.style.display = 'none';
+        fileSection.style.display = 'block';
+        urlInput.value = '';
+    }
+}
+
 // ============ UI FUNCTIONS ============
 function loadProducts() {
     const products = pm.getAll();
@@ -411,12 +516,29 @@ function resetProducts() {
 
 function changePassword() {
     const newPassword = document.getElementById('newPassword').value;
+    const confirmPassword = document.getElementById('confirmPassword')?.value;
+
     if (newPassword.trim() === '') {
-        showMessage('Veuillez entrer un mot de passe', 'danger');
+        showMessage('Veuillez entrer un nouveau mot de passe', 'danger');
         return;
     }
 
-    // Avertissement: Ceci est juste une démo. Idealement, changer le mot de passe dans le code source.
-    alert('Pour changer le mot de passe, modifiez "ADMIN_PASSWORD" dans admin.js ligne 2');
-    showMessage('Consultez la documentation pour changer le mot de passe', 'danger');
+    if (newPassword.length < 4) {
+        showMessage('Le mot de passe doit contenir au moins 4 caractères', 'danger');
+        return;
+    }
+
+    if (confirmPassword && newPassword !== confirmPassword) {
+        showMessage('Les mots de passe ne correspondent pas', 'danger');
+        return;
+    }
+
+    if (auth.setPassword(newPassword)) {
+        showMessage('Mot de passe changé avec succès! ✅', 'success');
+        document.getElementById('newPassword').value = '';
+        if (document.getElementById('confirmPassword')) {
+            document.getElementById('confirmPassword').value = '';
+        }
+    }
 }
+

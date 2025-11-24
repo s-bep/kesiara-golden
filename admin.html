@@ -45,14 +45,6 @@
             color: #1a1a1a;
         }
 
-        .btn-danger {
-            font-size: 14px;
-        }
-
-        .btn-warning {
-            font-size: 14px;
-        }
-
         .card {
             border: none;
             box-shadow: 0 2px 8px rgba(0,0,0,0.08);
@@ -86,30 +78,13 @@
             margin-bottom: 8px;
         }
 
-        .table {
-            font-size: 14px;
-        }
-
-        .table thead {
-            background-color: #f0f0f0;
-        }
-
-        .table th {
-            color: #1a1a1a;
-            font-weight: 600;
-            border-color: #ddd;
-        }
-
-        .product-image {
-            max-width: 80px;
-            max-height: 80px;
-            border-radius: 6px;
-            object-fit: cover;
-        }
-
-        .badge {
-            font-size: 12px;
-            padding: 6px 12px;
+        .image-preview {
+            max-width: 150px;
+            max-height: 150px;
+            border-radius: 8px;
+            margin-top: 10px;
+            border: 1px solid #ddd;
+            padding: 5px;
         }
 
         .alert {
@@ -188,6 +163,7 @@
             overflow: hidden;
             box-shadow: 0 2px 8px rgba(0,0,0,0.08);
             transition: transform 0.3s ease;
+            position: relative;
         }
 
         .product-card:hover {
@@ -287,10 +263,6 @@
             font-weight: 600;
         }
 
-        .product-card {
-            position: relative;
-        }
-
         .modal-header {
             background-color: #1a1a1a;
             color: white;
@@ -299,70 +271,120 @@
         .modal-header .btn-close {
             filter: invert(1);
         }
+
+        .image-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .image-tab-btn {
+            background: none;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            color: #8b8b8b;
+            font-weight: 600;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .image-tab-btn.active {
+            color: #1a1a1a;
+            border-bottom-color: #C9A961;
+        }
+
+        .file-input-label {
+            display: block;
+            padding: 15px;
+            background-color: #f8f8f8;
+            border: 2px dashed #ddd;
+            border-radius: 6px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .file-input-label:hover {
+            background-color: #f0f0f0;
+            border-color: #C9A961;
+        }
+
+        #productImageFile, #editProductImageFile {
+            display: none;
+        }
+
+        .security-info {
+            background-color: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            font-size: 13px;
+        }
     </style>
 </head>
 <body>
-    <div id="loginScreen" class="login-container" style="display: none;">
+    <div id="loginScreen" class="login-container">
         <div class="login-card">
-            <h2>Admin Kesiara</h2>
+            <h2>🔒 Admin Kesiara</h2>
+            <div class="security-info">
+                <strong>🔐 Nouveau système sécurisé:</strong>
+                <p class="mt-2 mb-0">Votre mot de passe est hashé localement. Changez-le dans les paramètres!</p>
+            </div>
             <div class="form-group">
                 <label class="form-label">Mot de passe</label>
-                <input type="password" id="passwordInput" class="form-control" placeholder="Entrez le mot de passe">
+                <input type="password" id="passwordInput" class="form-control" placeholder="Entrez votre mot de passe" onkeypress="if(event.key==='Enter') login()">
             </div>
             <button onclick="login()" class="btn btn-primary w-100">Connexion</button>
-            <p id="loginError" class="alert alert-danger mt-3" style="display: none;">Mot de passe incorrect</p>
+            <p id="loginError" class="alert alert-danger mt-3" style="display: none;"></p>
         </div>
     </div>
 
     <div id="adminPanel" style="display: none;">
-        <!-- Navbar -->
         <nav class="navbar navbar-dark">
             <div class="container-fluid">
-                <span class="navbar-brand">Kesiara Golden - Admin</span>
+                <span class="navbar-brand">🌟 Kesiara Golden - Admin</span>
                 <button class="logout-btn" onclick="logout()">Déconnexion</button>
             </div>
         </nav>
 
-        <!-- Main Content -->
         <div class="container-admin">
             <div id="successMessage" class="alert alert-success" style="display: none;"></div>
             <div id="errorMessage" class="alert alert-danger" style="display: none;"></div>
 
-            <!-- Tabs -->
             <ul class="nav nav-tabs" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link active" data-bs-toggle="tab" href="#productsTab">Mes Produits</a>
+                    <a class="nav-link active" data-bs-toggle="tab" href="#productsTab">📦 Mes Produits</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="tab" href="#addProductTab">Ajouter Produit</a>
+                    <a class="nav-link" data-bs-toggle="tab" href="#addProductTab">➕ Ajouter Produit</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="tab" href="#settingsTab">Paramètres</a>
+                    <a class="nav-link" data-bs-toggle="tab" href="#settingsTab">⚙️ Paramètres</a>
                 </li>
             </ul>
 
-            <!-- Tab Content -->
             <div class="tab-content">
-                <!-- Products List Tab -->
                 <div id="productsTab" class="tab-pane fade show active">
-                    <h3 class="mb-4">Liste des Produits</h3>
+                    <h3 class="mb-4">📋 Liste des Produits</h3>
                     <div id="productsContainer" class="products-grid"></div>
                 </div>
 
-                <!-- Add Product Tab -->
                 <div id="addProductTab" class="tab-pane fade">
-                    <h3 class="mb-4">Ajouter un Nouveau Produit</h3>
+                    <h3 class="mb-4">➕ Ajouter un Nouveau Produit</h3>
                     <div class="row">
                         <div class="col-md-8">
                             <form id="productForm">
                                 <div class="mb-3">
-                                    <label class="form-label">Nom du Produit</label>
+                                    <label class="form-label">Nom du Produit *</label>
                                     <input type="text" id="productName" class="form-control" required>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
-                                        <label class="form-label">Catégorie</label>
+                                        <label class="form-label">Catégorie *</label>
                                         <select id="productCategory" class="form-select" required>
                                             <option value="">Sélectionnez une catégorie</option>
                                             <option value="Colliers">Colliers</option>
@@ -374,7 +396,7 @@
                                         </select>
                                     </div>
                                     <div class="col-md-6 mb-3">
-                                        <label class="form-label">Genre</label>
+                                        <label class="form-label">Genre *</label>
                                         <select id="productGender" class="form-select" required>
                                             <option value="">Sélectionnez un genre</option>
                                             <option value="Femme">Femme</option>
@@ -385,11 +407,11 @@
 
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
-                                        <label class="form-label">Matériau</label>
+                                        <label class="form-label">Matériau *</label>
                                         <input type="text" id="productMaterial" class="form-control" required>
                                     </div>
                                     <div class="col-md-6 mb-3">
-                                        <label class="form-label">Prix (CFA)</label>
+                                        <label class="form-label">Prix (CFA) *</label>
                                         <input type="number" id="productPrice" class="form-control" required>
                                     </div>
                                 </div>
@@ -405,77 +427,98 @@
                                     </div>
                                 </div>
 
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label class="form-label">Stock</label>
-                                        <input type="number" id="productStock" class="form-control" value="5" required>
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label class="form-label">Image Principal (URL)</label>
-                                        <input type="text" id="productImage" class="form-control" required placeholder="https://...">
-                                    </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Stock *</label>
+                                    <input type="number" id="productStock" class="form-control" value="5" required>
                                 </div>
 
                                 <div class="mb-3">
-                                    <label class="form-label">Description</label>
+                                    <label class="form-label">Image Produit *</label>
+                                    <div class="image-tabs">
+                                        <button type="button" class="image-tab-btn active" onclick="switchImageMode('url')">🔗 URL</button>
+                                        <button type="button" class="image-tab-btn" onclick="switchImageMode('file')">📁 Fichier</button>
+                                    </div>
+                                    
+                                    <div id="urlSection">
+                                        <input type="text" id="productImage" class="form-control" placeholder="https://images.unsplash.com/...">
+                                    </div>
+                                    
+                                    <div id="fileSection" style="display: none;">
+                                        <label class="file-input-label">
+                                            <i class="fas fa-cloud-upload-alt"></i><br>
+                                            Cliquez pour sélectionner une image
+                                        </label>
+                                        <input type="file" id="productImageFile" accept="image/*" onchange="handleImageUpload(event, 'productImage')">
+                                    </div>
+                                    <img id="productPreview" class="image-preview" style="display: none;">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Description *</label>
                                     <textarea id="productDescription" class="form-control" rows="4" required></textarea>
                                 </div>
 
                                 <div class="mb-3">
                                     <label class="form-label">
-                                        <input type="checkbox" id="productFeatured"> Produit en vedette
+                                        <input type="checkbox" id="productFeatured"> En vedette
                                     </label>
                                 </div>
 
-                                <button type="submit" class="btn btn-primary">Ajouter le Produit</button>
+                                <button type="submit" class="btn btn-primary">➕ Ajouter le Produit</button>
                             </form>
                         </div>
                         <div class="col-md-4">
                             <div class="card">
-                                <div class="card-header">Conseils</div>
+                                <div class="card-header">💡 Conseils Images</div>
                                 <div class="card-body">
-                                    <p><strong>Image URL:</strong> Utilisez Unsplash. Exemples:</p>
-                                    <small>
-                                        <div class="mb-2">Collier: photo-1599643478518</div>
-                                        <div class="mb-2">Boucles: photo-1611591437281</div>
-                                        <div class="mb-2">Bracelet: photo-1515562141207</div>
-                                    </small>
-                                    <p class="mt-3"><strong>Format complet:</strong></p>
-                                    <code style="font-size: 11px;">https://images.unsplash.com/photo-ID?w=500&h=500&fit=crop</code>
+                                    <p><strong>Deux options:</strong></p>
+                                    <ul style="font-size: 12px;">
+                                        <li><strong>🔗 URL:</strong> Lien image en ligne</li>
+                                        <li><strong>📁 Fichier:</strong> Depuis votre ordinateur</li>
+                                    </ul>
+                                    <hr>
+                                    <p><strong>Unsplash (gratuit):</strong></p>
+                                    <a href="https://unsplash.com" target="_blank" style="font-size: 12px;">unsplash.com</a>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Settings Tab -->
                 <div id="settingsTab" class="tab-pane fade">
-                    <h3 class="mb-4">Paramètres</h3>
+                    <h3 class="mb-4">⚙️ Paramètres</h3>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="card">
-                                <div class="card-header">Données</div>
+                                <div class="card-header">🔒 Sécurité</div>
                                 <div class="card-body">
-                                    <p>Gérez vos données sauvegardées localement.</p>
-                                    <button class="btn btn-primary" onclick="downloadData()">
-                                        <i class="fas fa-download"></i> Télécharger les données
-                                    </button>
-                                    <button class="btn btn-warning mt-2" onclick="resetProducts()">
-                                        <i class="fas fa-redo"></i> Réinitialiser les produits
-                                    </button>
+                                    <p>Changez votre mot de passe administrateur.</p>
+                                    <div class="form-group mb-3">
+                                        <label class="form-label">Nouveau mot de passe</label>
+                                        <input type="password" id="newPassword" class="form-control">
+                                    </div>
+                                    <div class="form-group mb-3">
+                                        <label class="form-label">Confirmer le mot de passe</label>
+                                        <input type="password" id="confirmPassword" class="form-control">
+                                    </div>
+                                    <button class="btn btn-primary" onclick="changePassword()">🔐 Changer le mot de passe</button>
+                                    <div class="security-info mt-3">
+                                        <strong>🛡️ Sécurisé:</strong> Mot de passe hashé localement, jamais envoyé.
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="card">
-                                <div class="card-header">Sécurité</div>
+                                <div class="card-header">💾 Données</div>
                                 <div class="card-body">
-                                    <p>Changez le mot de passe administrateur.</p>
-                                    <div class="form-group mb-3">
-                                        <label class="form-label">Nouveau mot de passe</label>
-                                        <input type="password" id="newPassword" class="form-control">
-                                    </div>
-                                    <button class="btn btn-primary" onclick="changePassword()">Changer le mot de passe</button>
+                                    <p>Gérez vos sauvegardes et réinitialisations.</p>
+                                    <button class="btn btn-primary mb-2" onclick="downloadData()">
+                                        <i class="fas fa-download"></i> Télécharger les données
+                                    </button>
+                                    <button class="btn btn-warning" onclick="resetProducts()">
+                                        <i class="fas fa-redo"></i> Réinitialiser
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -490,7 +533,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Modifier le Produit</h5>
+                    <h5 class="modal-title">✏️ Modifier le Produit</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
@@ -540,30 +583,46 @@
                                 <input type="text" id="editProductDimensions" class="form-control">
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Stock</label>
-                                <input type="number" id="editProductStock" class="form-control" required>
+                        <div class="mb-3">
+                            <label class="form-label">Stock</label>
+                            <input type="number" id="editProductStock" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Image</label>
+                            <div class="image-tabs">
+                                <button type="button" class="image-tab-btn active" onclick="switchImageModeEdit('url')">🔗 URL</button>
+                                <button type="button" class="image-tab-btn" onclick="switchImageModeEdit('file')">📁 Fichier</button>
                             </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Image (URL)</label>
+                            
+                            <div id="editUrlSection">
                                 <input type="text" id="editProductImage" class="form-control" required>
                             </div>
+                            
+                            <div id="editFileSection" style="display: none;">
+                                <label class="file-input-label">
+                                    <i class="fas fa-cloud-upload-alt"></i><br>
+                                    Cliquez pour sélectionner une image
+                                </label>
+                                <input type="file" id="editProductImageFile" accept="image/*" onchange="handleImageUpload(event, 'editProductImage')">
+                            </div>
+                            <img id="editProductPreview" class="image-preview" style="display: none;">
                         </div>
+
                         <div class="mb-3">
                             <label class="form-label">Description</label>
                             <textarea id="editProductDescription" class="form-control" rows="4" required></textarea>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">
-                                <input type="checkbox" id="editProductFeatured"> Produit en vedette
+                                <input type="checkbox" id="editProductFeatured"> En vedette
                             </label>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                    <button type="button" class="btn btn-primary" onclick="saveEditedProduct()">Enregistrer</button>
+                    <button type="button" class="btn btn-primary" onclick="saveEditedProduct()">💾 Enregistrer</button>
                 </div>
             </div>
         </div>
