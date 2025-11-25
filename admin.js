@@ -692,3 +692,65 @@ function saveBrandConfig() {
     showMessage('Logo & Branding mis à jour! ✅ (Rafraîchissez le site pour voir les changements)', 'success');
 }
 
+// ============ IMAGE GALLERY ============
+let currentImageTargetId = null;
+
+function openImageGallery(targetId) {
+    currentImageTargetId = targetId;
+    
+    // Galerie prédéfinie d'images Unsplash
+    const galleryImages = [
+        'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=400&h=400&fit=crop',
+        'https://images.unsplash.com/photo-1599643478518-e00d9d8c5512?w=400&h=400&fit=crop',
+        'https://images.unsplash.com/photo-1515562141207-6811bcdd56cd?w=400&h=400&fit=crop',
+        'https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=400&h=400&fit=crop',
+        'https://images.unsplash.com/photo-1509941943102-7a002ba0d37b?w=400&h=400&fit=crop',
+        'https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?w=400&h=400&fit=crop',
+        'https://images.unsplash.com/photo-1599643478518-e00d9d8c5512?w=400&h=400&fit=crop',
+        'https://images.unsplash.com/photo-1515377905703-c511b6b50f4e?w=400&h=400&fit=crop',
+        'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400&h=400&fit=crop',
+        'https://images.unsplash.com/photo-1599643478518-e00d9d8c5512?w=400&h=400&fit=crop',
+        'https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=400&h=400&fit=crop',
+        'https://images.unsplash.com/photo-1573408301185-9146fe634ad0?w=400&h=400&fit=crop'
+    ];
+    
+    const galleryGrid = document.getElementById('galleryGrid');
+    galleryGrid.innerHTML = '';
+    
+    galleryImages.forEach(imgUrl => {
+        const col = document.createElement('div');
+        col.className = 'col-md-4 col-sm-6';
+        col.innerHTML = `
+            <div class="gallery-item" style="cursor: pointer; border: 1px solid #e5e5e5; border-radius: 8px; overflow: hidden; height: 150px;">
+                <img src="${imgUrl}" alt="Gallery" style="width: 100%; height: 100%; object-fit: cover;" 
+                     onclick="selectGalleryImage('${imgUrl}')" title="Cliquez pour sélectionner">
+            </div>
+        `;
+        galleryGrid.appendChild(col);
+    });
+    
+    const modal = new bootstrap.Modal(document.getElementById('galleryModal'));
+    modal.show();
+}
+
+function selectGalleryImage(imageUrl) {
+    if (currentImageTargetId) {
+        document.getElementById(currentImageTargetId).value = imageUrl;
+        
+        // Afficher l'aperçu
+        const previewId = currentImageTargetId.includes('edit') ? 'editProductPreview' : 'productPreview';
+        const previewEl = document.getElementById(previewId);
+        if (previewEl) {
+            previewEl.src = imageUrl;
+            previewEl.style.display = 'block';
+        }
+        
+        // Fermer la modal
+        const modal = bootstrap.Modal.getInstance(document.getElementById('galleryModal'));
+        if (modal) modal.hide();
+        
+        showMessage('Image sélectionnée! ✅', 'success');
+    }
+}
+
+

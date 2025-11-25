@@ -26,6 +26,7 @@ body {
     background-color: var(--white);
     color: var(--dark);
     line-height: 1.6;
+    font-size: 16px;
 }
 
 /* ==================== CONTAINER ==================== */
@@ -277,7 +278,7 @@ body {
 
 .product-name {
     font-family: 'Playfair Display', serif;
-    font-size: 24px;
+    font-size: 26px;
     font-weight: 400;
     margin-bottom: 8px;
     letter-spacing: 1px;
@@ -292,7 +293,7 @@ body {
 }
 
 .product-price {
-    font-size: 20px;
+    font-size: 22px;
     font-weight: 700;
     color: var(--gold);
     letter-spacing: 0.5px;
@@ -431,7 +432,7 @@ body {
 }
 
 .price-detail {
-    font-size: 32px;
+    font-size: 36px;
     color: var(--gold);
     font-weight: 700;
     margin-bottom: 30px;
@@ -582,7 +583,7 @@ body {
     cursor: pointer;
     margin-top: 20px;
     transition: all 0.3s ease;
-    font-size: 16px;
+    font-size: 17px;
 }
 
 .btn-checkout:hover {
@@ -776,7 +777,7 @@ body {
     .add-to-cart {
         width: 100%;
         padding: 16px;
-        font-size: 14px;
+        font-size: 15px;
     }
 
     /* CART */
@@ -790,7 +791,7 @@ body {
     }
 
     .cart-table {
-        font-size: 13px;
+        font-size: 14px;
     }
 
     .cart-table td,
@@ -949,8 +950,6 @@ body {
         color: var(--gold) !important;
     }
 
-    }
-
     /* NAVBAR */
     .navbar {
         padding: 12px 15px;
@@ -1006,8 +1005,8 @@ body {
     }
 
     .section-title {
-        font-size: 24px;
-        margin-bottom: 25px;
+        font-size: 28px;
+        margin-bottom: 30px;
     }
 
     /* PRODUCTS GRID */
@@ -1229,8 +1228,8 @@ body {
 
     /* BUTTONS */
     .btn-primary {
-        padding: 12px 20px;
-        font-size: 13px;
+        padding: 14px 30px;
+        font-size: 15px;
         width: 100%;
     }
 

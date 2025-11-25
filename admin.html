@@ -56,13 +56,13 @@
             color: #C9A961;
             border: none;
             font-weight: 600;
-            font-size: 18px;
+            font-size: 19px;
         }
 
         .form-control, .form-select {
             border: 1px solid #ddd;
             border-radius: 6px;
-            font-size: 14px;
+            font-size: 15px;
             padding: 10px 12px;
         }
 
@@ -74,7 +74,7 @@
         .form-label {
             font-weight: 600;
             color: #1a1a1a;
-            font-size: 14px;
+            font-size: 15px;
             margin-bottom: 8px;
         }
 
@@ -90,7 +90,7 @@
         .alert {
             border-radius: 6px;
             border: none;
-            font-size: 14px;
+            font-size: 15px;
         }
 
         .alert-success {
@@ -332,7 +332,7 @@
 
             .logout-btn {
                 padding: 8px 16px;
-                font-size: 12px;
+                font-size: 13px;
             }
 
             .nav-tabs {
@@ -342,7 +342,7 @@
 
             .nav-link {
                 padding: 10px 12px !important;
-                font-size: 12px !important;
+                font-size: 13px !important;
             }
 
             .card {
@@ -361,7 +361,7 @@
 
             .btn-primary {
                 padding: 10px 16px;
-                font-size: 14px;
+                font-size: 15px;
             }
 
             .row {
@@ -382,13 +382,13 @@
             .image-tab-btn {
                 flex: 1;
                 padding: 8px 12px;
-                font-size: 12px;
+                font-size: 13px;
             }
         }
 
         @media (max-width: 576px) {
             body {
-                font-size: 13px;
+                font-size: 14px;
             }
 
             .login-container {
@@ -414,7 +414,7 @@
 
             .logout-btn {
                 padding: 6px 12px;
-                font-size: 11px;
+                font-size: 12px;
             }
 
             .container-admin {
@@ -429,7 +429,7 @@
             .nav-link {
                 border-radius: 0 !important;
                 padding: 10px 12px !important;
-                font-size: 12px !important;
+                font-size: 13px !important;
                 text-align: left;
             }
 
@@ -447,7 +447,7 @@
             }
 
             .card-header {
-                font-size: 14px;
+                font-size: 15px;
                 padding: 10px;
             }
 
@@ -742,6 +742,7 @@
                                     <div class="image-tabs">
                                         <button type="button" class="image-tab-btn active" onclick="switchImageMode('url')">🔗 URL</button>
                                         <button type="button" class="image-tab-btn" onclick="switchImageMode('file')">📁 Fichier</button>
+                                        <button type="button" class="image-tab-btn" onclick="openImageGallery('productImage')">🎨 Galerie</button>
                                     </div>
                                     
                                     <div id="urlSection">
@@ -1022,6 +1023,7 @@
                             <div class="image-tabs">
                                 <button type="button" class="image-tab-btn active" onclick="switchImageModeEdit('url')">🔗 URL</button>
                                 <button type="button" class="image-tab-btn" onclick="switchImageModeEdit('file')">📁 Fichier</button>
+                                <button type="button" class="image-tab-btn" onclick="openImageGallery('editProductImage')">🎨 Galerie</button>
                             </div>
                             
                             <div id="editUrlSection">
@@ -1052,6 +1054,23 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
                     <button type="button" class="btn btn-primary" onclick="saveEditedProduct()">💾 Enregistrer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- IMAGE GALLERY MODAL -->
+    <div class="modal fade" id="galleryModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">🎨 Galerie d'Images</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row" id="galleryGrid" style="gap: 10px;">
+                        <!-- Images générées dynamiquement -->
+                    </div>
                 </div>
             </div>
         </div>
