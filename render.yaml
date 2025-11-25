@@ -1,5 +1,12 @@
 services:
-  - type: static_site
+  - type: web
     name: kesiara-golden
-    publishPath: .
+    env: node
+    region: oregon
+    plan: free
     branch: main
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
