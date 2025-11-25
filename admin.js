@@ -599,6 +599,7 @@ function saveTaxConfig() {
     showMessage('Configuration Taxes & Livraison mise à jour! ✅', 'success');
 }
 
+
 function saveTextConfig() {
     const updates = {
         siteName: document.getElementById('siteName').value,
@@ -609,6 +610,49 @@ function saveTextConfig() {
     
     configManager.updateMultiple(updates);
     showMessage('Textes du site mis à jour! ✅ (Rafraîchissez le site pour voir les changements)', 'success');
+}
+
+// ============ LOGO UPLOAD FUNCTIONS ============
+function switchLogoMode(mode) {
+    const urlSection = document.getElementById('logoUrlSection');
+    const fileSection = document.getElementById('logoFileSection');
+    const fileInput = document.getElementById('logoImageFile');
+    const logoInput = document.getElementById('logo');
+
+    if (mode === 'url') {
+        urlSection.style.display = 'block';
+        fileSection.style.display = 'none';
+        fileInput.value = '';
+    } else {
+        urlSection.style.display = 'none';
+        fileSection.style.display = 'block';
+        logoInput.value = '';
+    }
+
+    // Update button states
+    const buttons = event.currentTarget.parentElement.querySelectorAll('.image-tab-btn');
+    buttons.forEach(btn => btn.classList.remove('active'));
+    event.currentTarget.classList.add('active');
+}
+
+function handleLogoUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        // Convertir en base64 pour localStorage
+        const base64Image = e.target.result;
+        document.getElementById('logo').value = base64Image;
+        
+        // Prévisualiser
+        const preview = document.getElementById('logoPreview');
+        if (preview) {
+            preview.src = base64Image;
+            preview.style.display = 'block';
+        }
+    };
+    reader.readAsDataURL(file);
 }
 
 function saveBrandConfig() {

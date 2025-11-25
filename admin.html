@@ -578,9 +578,24 @@
                                 <div class="card-header">🖼️ Logo & Branding</div>
                                 <div class="card-body">
                                     <div class="form-group mb-3">
-                                        <label class="form-label">URL Logo</label>
-                                        <input type="text" id="logo" class="form-control" placeholder="Assets/LOGO.png" value="">
-                                        <small class="text-muted">Chemin ou URL de l'image</small>
+                                        <label class="form-label">Logo</label>
+                                        <div class="image-tabs" style="margin-bottom: 10px;">
+                                            <button type="button" class="image-tab-btn active" onclick="switchLogoMode('url')">🔗 URL</button>
+                                            <button type="button" class="image-tab-btn" onclick="switchLogoMode('file')">📁 Fichier</button>
+                                        </div>
+                                        
+                                        <div id="logoUrlSection">
+                                            <input type="text" id="logo" class="form-control" placeholder="Assets/LOGO.png ou https://..." value="">
+                                            <small class="text-muted">Chemin ou URL de l'image</small>
+                                        </div>
+                                        
+                                        <div id="logoFileSection" style="display: none;">
+                                            <label class="file-input-label">
+                                                <i class="fas fa-cloud-upload-alt"></i><br>
+                                                Cliquez pour sélectionner un logo
+                                            </label>
+                                            <input type="file" id="logoImageFile" accept="image/*" onchange="handleLogoUpload(event)">
+                                        </div>
                                     </div>
                                     <div class="form-group mb-3">
                                         <label class="form-label">Adresse</label>
@@ -588,7 +603,7 @@
                                     </div>
                                     <div class="form-group mb-3">
                                         <label class="form-label">Prévisualisation Logo</label>
-                                        <img id="logoPreview" style="max-width: 100%; max-height: 100px; margin-top: 10px; border-radius: 4px;">
+                                        <img id="logoPreview" style="max-width: 100%; max-height: 120px; margin-top: 10px; border-radius: 4px; border: 1px solid #ddd; padding: 5px; display: none;">
                                     </div>
                                     <button class="btn btn-primary" onclick="saveBrandConfig()">💾 Enregistrer</button>
                                 </div>

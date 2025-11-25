@@ -232,6 +232,52 @@ class CartManager {
 
 const cartManager = new CartManager();
 
+// ==================== INITIALIZE DYNAMIC CONTENT ====================
+function initializeSiteFromConfig() {
+    try {
+        const config = configManager.getConfig();
+        
+        // Update title
+        document.title = config.siteName || 'Kesiara Golden - Bijoux Luxe';
+        
+        // Update navbar brand
+        const navbarBrand = document.querySelector('.navbar-brand');
+        if (navbarBrand) navbarBrand.textContent = config.siteName || 'KESIARA GOLDEN';
+        
+        // Update hero title and subtitle
+        const heroTitle = document.querySelector('.hero h1');
+        if (heroTitle) heroTitle.textContent = config.homepageTitle || 'KESIARA GOLDEN';
+        
+        const heroSubtitle = document.querySelector('.hero p');
+        if (heroSubtitle) heroSubtitle.textContent = config.homepageSubtitle || 'Bijoux d\'exception en or massif';
+        
+        // Update logo in navbar
+        const navbarLogo = document.querySelector('.navbar-logo');
+        if (navbarLogo && config.logo) {
+            navbarLogo.src = config.logo;
+        }
+        
+        // Update footer brand
+        const footerBrand = document.querySelector('footer h3');
+        if (footerBrand) footerBrand.textContent = config.siteName || 'KESIARA GOLDEN';
+        
+        // Update footer copyright
+        const footerCopyright = document.querySelector('footer p');
+        if (footerCopyright) {
+            footerCopyright.textContent = `© 2025 ${config.siteName || 'Kesiara Golden'}. Tous droits réservés.`;
+        }
+        
+        // Update WhatsApp number in hero
+        const heroWhatsAppBtn = document.querySelector('.hero a[href*="wa.me"]');
+        if (heroWhatsAppBtn && config.whatsappNumber) {
+            const message = encodeURIComponent('Bonjour, j\'aimerais commander');
+            heroWhatsAppBtn.href = `https://wa.me/${config.whatsappNumber}?text=${message}`;
+        }
+    } catch (e) {
+        console.error('Erreur lors de l\'initialisation de la configuration:', e);
+    }
+}
+
 // ==================== UTILITIES ==================== 
 function formatPrice(price) {
     return new Intl.NumberFormat('fr-FR', {
