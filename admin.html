@@ -323,6 +323,308 @@
             margin-bottom: 20px;
             font-size: 13px;
         }
+
+        /* ==================== RESPONSIVE ADMIN ==================== */
+        @media (max-width: 768px) {
+            .navbar-brand {
+                font-size: 18px;
+            }
+
+            .logout-btn {
+                padding: 8px 16px;
+                font-size: 12px;
+            }
+
+            .nav-tabs {
+                flex-wrap: wrap;
+                gap: 5px;
+            }
+
+            .nav-link {
+                padding: 10px 12px !important;
+                font-size: 12px !important;
+            }
+
+            .card {
+                margin-bottom: 15px;
+            }
+
+            .card-header {
+                font-size: 16px;
+                padding: 12px;
+            }
+
+            .form-control, .form-select {
+                font-size: 13px;
+                padding: 8px 10px;
+            }
+
+            .btn-primary {
+                padding: 10px 16px;
+                font-size: 14px;
+            }
+
+            .row {
+                margin-right: 0;
+                margin-left: 0;
+            }
+
+            .col-md-6 {
+                padding: 8px;
+            }
+
+            .image-tabs {
+                display: flex;
+                gap: 10px;
+                margin-bottom: 10px;
+            }
+
+            .image-tab-btn {
+                flex: 1;
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            body {
+                font-size: 13px;
+            }
+
+            .login-container {
+                padding: 10px;
+            }
+
+            .login-card {
+                padding: 20px;
+                border-radius: 8px;
+            }
+
+            .navbar {
+                padding: 8px 0;
+            }
+
+            .navbar-brand {
+                font-size: 16px;
+            }
+
+            .container-fluid {
+                padding: 10px;
+            }
+
+            .logout-btn {
+                padding: 6px 12px;
+                font-size: 11px;
+            }
+
+            .container-admin {
+                padding: 10px;
+            }
+
+            .nav-tabs {
+                flex-direction: column;
+                gap: 0;
+            }
+
+            .nav-link {
+                border-radius: 0 !important;
+                padding: 10px 12px !important;
+                font-size: 12px !important;
+                text-align: left;
+            }
+
+            .nav-link.active {
+                border-left: 4px solid #C9A961 !important;
+            }
+
+            .tab-pane {
+                padding: 10px 0;
+            }
+
+            .card {
+                border-radius: 6px;
+                margin-bottom: 12px;
+            }
+
+            .card-header {
+                font-size: 14px;
+                padding: 10px;
+            }
+
+            .card-body {
+                padding: 12px;
+            }
+
+            .form-group {
+                margin-bottom: 10px;
+            }
+
+            .form-label {
+                font-size: 12px;
+                margin-bottom: 5px;
+            }
+
+            .form-control, .form-select {
+                font-size: 13px;
+                padding: 8px;
+                height: auto;
+            }
+
+            .btn-primary, .btn-secondary, .btn-warning, .btn-danger {
+                padding: 8px 12px;
+                font-size: 12px;
+                width: 100%;
+                margin-bottom: 8px;
+            }
+
+            .col-md-6 {
+                padding: 5px;
+            }
+
+            .row {
+                margin-right: -5px;
+                margin-left: -5px;
+            }
+
+            .mb-3 {
+                margin-bottom: 8px !important;
+            }
+
+            .mt-3 {
+                margin-top: 8px !important;
+            }
+
+            .image-preview {
+                max-width: 100px;
+                max-height: 100px;
+            }
+
+            .product-card {
+                margin-bottom: 10px;
+            }
+
+            .product-card-actions {
+                gap: 5px;
+            }
+
+            .btn-edit-card, .btn-delete-card {
+                padding: 6px 10px;
+                font-size: 11px;
+                flex: 1;
+            }
+
+            .modal-dialog {
+                margin: 10px;
+            }
+
+            .modal-content {
+                border-radius: 6px;
+            }
+
+            .modal-header, .modal-footer {
+                padding: 10px;
+            }
+
+            .modal-body {
+                padding: 12px;
+            }
+
+            .modal-title {
+                font-size: 16px;
+            }
+
+            .file-input-label {
+                padding: 20px;
+                font-size: 12px;
+            }
+
+            .image-tabs {
+                display: flex;
+                gap: 5px;
+                margin-bottom: 8px;
+            }
+
+            .image-tab-btn {
+                flex: 1;
+                padding: 6px 8px;
+                font-size: 11px;
+            }
+
+            .image-tab-btn.active {
+                background-color: #C9A961;
+                color: white;
+            }
+
+            input[type="file"] {
+                font-size: 12px;
+            }
+
+            .alert {
+                font-size: 12px;
+                padding: 8px 12px;
+                margin-bottom: 8px;
+            }
+
+            .security-info {
+                font-size: 12px;
+                padding: 10px;
+            }
+
+            /* PRODUCTS TABLE */
+            .cart-table {
+                font-size: 11px;
+            }
+
+            .cart-table th, .cart-table td {
+                padding: 6px 4px;
+            }
+
+            .cart-table img {
+                max-width: 40px;
+                max-height: 40px;
+            }
+
+            /* FORMS */
+            .form-control:focus {
+                font-size: 13px;
+            }
+
+            .btn-group {
+                width: 100%;
+                gap: 5px;
+            }
+
+            .text-muted {
+                font-size: 11px;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .navbar-brand {
+                font-size: 14px;
+            }
+
+            .login-card {
+                padding: 15px;
+            }
+
+            .card-header {
+                font-size: 13px;
+            }
+
+            .form-label {
+                font-size: 11px;
+            }
+
+            .btn-primary, .btn-secondary {
+                padding: 6px 10px;
+                font-size: 11px;
+            }
+
+            .nav-link {
+                font-size: 11px !important;
+            }
+        }
     </style>
 </head>
 <body>
