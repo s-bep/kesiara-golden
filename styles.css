@@ -48,10 +48,17 @@ body {
     width: 100%;
 }
 
-.navbar .container {
+.navbar-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 100%;
+}
+
+.navbar-brand-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .navbar-brand {
@@ -62,20 +69,36 @@ body {
     color: var(--dark);
     text-decoration: none;
     display: inline-block;
+    white-space: nowrap;
 }
 
 .logo-nav {
     max-height: 40px;
-    margin-right: 15px;
     display: inline-block;
 }
 
+/* NAVBAR TOGGLE (BURGER MENU) */
+.navbar-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--dark);
+    padding: 8px;
+    transition: color 0.3s ease;
+}
+
+.navbar-toggle:hover {
+    color: var(--gold);
+}
+
 .navbar-nav {
-    margin-left: auto;
     display: flex;
     gap: 40px;
     align-items: center;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    transition: all 0.3s ease;
 }
 
 .navbar-nav .nav-link {
@@ -86,6 +109,7 @@ body {
     text-decoration: none;
     position: relative;
     transition: color 0.3s ease;
+    white-space: nowrap;
 }
 
 .navbar-nav .nav-link::after {
@@ -108,11 +132,16 @@ body {
 }
 
 .cart-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 24px;
     height: 24px;
     position: relative;
     cursor: pointer;
     transition: color 0.3s ease;
+    text-decoration: none;
+    color: var(--dark);
 }
 
 .cart-icon:hover {
@@ -837,6 +866,68 @@ body {
     .container {
         padding: 0 15px;
         max-width: 100%;
+    }
+
+    /* NAVBAR MOBILE */
+    .navbar {
+        padding: 12px 0;
+    }
+
+    .navbar-brand {
+        font-size: 18px;
+        letter-spacing: 0.5px;
+    }
+
+    .navbar-brand-wrapper {
+        gap: 8px;
+    }
+
+    .logo-nav {
+        max-height: 30px;
+    }
+
+    .navbar-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .navbar-nav {
+        position: fixed;
+        top: 70px;
+        left: 0;
+        right: 0;
+        background: var(--white);
+        flex-direction: column;
+        gap: 0;
+        padding: 0;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+        border-bottom: 1px solid var(--border);
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .navbar-nav.active {
+        max-height: 300px;
+        padding: 15px 0;
+    }
+
+    .navbar-nav .nav-link {
+        display: block;
+        padding: 12px 20px;
+        border-bottom: 1px solid var(--border);
+        font-size: 14px;
+    }
+
+    .navbar-nav .nav-link::after {
+        display: none;
+    }
+
+    .navbar-nav .cart-icon {
+        padding: 12px 20px;
+        justify-content: flex-start;
+        border-bottom: 1px solid var(--border);
     }
 
     /* NAVBAR */

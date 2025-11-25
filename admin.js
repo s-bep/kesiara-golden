@@ -546,33 +546,52 @@ function changePassword() {
 // ============ CONFIGURATION FUNCTIONS ============
 
 function loadConfigUI() {
-    const config = configManager.getConfig();
-    
-    // WhatsApp & Contact
-    document.getElementById('whatsappNumber').value = config.whatsappNumber || '';
-    document.getElementById('whatsappMessage').value = config.whatsappMessage || '';
-    document.getElementById('phone').value = config.phone || '';
-    document.getElementById('email').value = config.email || '';
-    
-    // Taxes
-    document.getElementById('taxRate').value = config.taxRate || 18;
-    document.getElementById('shippingInfo').value = config.shippingInfo || '';
-    document.getElementById('deliveryTime').value = config.deliveryTime || '';
-    
-    // Texte
-    document.getElementById('siteName').value = config.siteName || '';
-    document.getElementById('siteTagline').value = config.siteTagline || '';
-    document.getElementById('homepageTitle').value = config.homepageTitle || '';
-    document.getElementById('homepageSubtitle').value = config.homepageSubtitle || '';
-    
-    // Logo & Branding
-    document.getElementById('logo').value = config.logo || '';
-    document.getElementById('address').value = config.address || '';
-    
-    // Prévisualisation logo
-    if (config.logo) {
-        document.getElementById('logoPreview').src = config.logo;
-        document.getElementById('logoPreview').style.display = 'block';
+    try {
+        const config = configManager.getConfig();
+        
+        // Helper function to safely set value
+        const setValue = (id, value) => {
+            const el = document.getElementById(id);
+            if (el) el.value = value || '';
+        };
+        
+        // Helper function to safely set image preview
+        const setImagePreview = (id, previewId, src) => {
+            const el = document.getElementById(id);
+            if (el) el.value = src || '';
+            if (src && previewId) {
+                const preview = document.getElementById(previewId);
+                if (preview) {
+                    preview.src = src;
+                    preview.style.display = 'block';
+                }
+            }
+        };
+        
+        // WhatsApp & Contact
+        setValue('whatsappNumber', config.whatsappNumber);
+        setValue('whatsappMessage', config.whatsappMessage);
+        setValue('phone', config.phone);
+        setValue('email', config.email);
+        
+        // Taxes
+        setValue('taxRate', config.taxRate || 18);
+        setValue('shippingInfo', config.shippingInfo);
+        setValue('deliveryTime', config.deliveryTime);
+        
+        // Texte
+        setValue('siteName', config.siteName);
+        setValue('siteTagline', config.siteTagline);
+        setValue('homepageTitle', config.homepageTitle);
+        setValue('homepageSubtitle', config.homepageSubtitle);
+        
+        // Logo & Branding
+        setImagePreview('logo', 'logoPreview', config.logo);
+        setValue('address', config.address);
+        
+        console.log('Config UI loaded successfully', config);
+    } catch (e) {
+        console.error('Erreur lors du chargement de la config UI:', e);
     }
 }
 

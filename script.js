@@ -1,3 +1,23 @@
+// ==================== NAVBAR MOBILE MENU ====================
+document.addEventListener('DOMContentLoaded', function() {
+    const navbarToggle = document.getElementById('navbarToggle');
+    const navbarMenu = document.getElementById('navbarMenu');
+    
+    if (navbarToggle) {
+        navbarToggle.addEventListener('click', function() {
+            navbarMenu.classList.toggle('active');
+        });
+    }
+    
+    // Fermer le menu quand on clique sur un lien
+    const navLinks = document.querySelectorAll('.navbar-nav .nav-link, .navbar-nav .cart-icon');
+    navLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            navbarMenu.classList.remove('active');
+        });
+    });
+});
+
 // ==================== PRODUCTS DATABASE ==================== 
 // Charge les produits depuis localStorage (gérés par admin.html)
 let products = [];
@@ -633,6 +653,20 @@ function updateCartSummary() {
 }
 
 // ==================== WHATSAPP INTEGRATION ==================== 
+function generateProductWhatsAppMessage(product, quantity = 1) {
+    let message = "*INTÉRESSÉ PAR UN PRODUIT* 📱\n\n";
+    message += `*${product.name}*\n\n`;
+    message += `Matière: ${product.material}\n`;
+    message += `Poids: ${product.weight}\n`;
+    message += `Dimensions: ${product.dimensions}\n`;
+    message += `Prix unitaire: ${formatPrice(product.price)}\n`;
+    message += `Quantité: ${quantity}\n`;
+    message += `*Total: ${formatPrice(product.price * quantity)}*\n\n`;
+    message += "Merci de confirmer la disponibilité et les détails.";
+    
+    return encodeURIComponent(message);
+}
+
 function generateWhatsAppMessage() {
     const cart = cartManager.getCart();
     if (cart.length === 0) {

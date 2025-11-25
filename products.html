@@ -11,22 +11,24 @@
 </head>
 <body>
     <!-- NAVBAR -->
+    <!-- NAVBAR -->
     <nav class="navbar">
-        <div class="container">
-            <div style="display: flex; align-items: center; width: 100%;">
-                <div style="display: flex; align-items: center;">
-                    <img src="Assets/LOGO.png" alt="Logo" class="logo-nav">
-                    <a href="index.html" class="navbar-brand">KESIARA GOLDEN</a>
-                </div>
-                <div class="navbar-nav">
-                    <a href="index.html" class="nav-link">Accueil</a>
-                    <a href="products.html" class="nav-link">Collection</a>
-                    <a href="index.html#contact" class="nav-link">Contact</a>
-                    <a href="cart.html" class="cart-icon" style="position: relative; display: flex; align-items: center;">
-                        <i class="fas fa-shopping-bag"></i>
-                        <span class="cart-count">0</span>
-                    </a>
-                </div>
+        <div class="container navbar-container">
+            <div class="navbar-brand-wrapper">
+                <img src="Assets/LOGO.png" alt="Logo" class="logo-nav">
+                <a href="index.html" class="navbar-brand">KESIARA GOLDEN</a>
+            </div>
+            <button class="navbar-toggle" id="navbarToggle" aria-label="Menu">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="navbar-nav" id="navbarMenu">
+                <a href="index.html" class="nav-link">Accueil</a>
+                <a href="products.html" class="nav-link">Collection</a>
+                <a href="index.html#contact" class="nav-link">Contact</a>
+                <a href="cart.html" class="cart-icon" title="Panier">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span class="cart-count">0</span>
+                </a>
             </div>
         </div>
     </nav>
