@@ -79,12 +79,14 @@
         }
 
         .image-preview {
-            max-width: 150px;
-            max-height: 150px;
+            max-width: 200px;
+            max-height: 200px;
             border-radius: 8px;
-            margin-top: 10px;
-            border: 1px solid #ddd;
-            padding: 5px;
+            margin-top: 15px;
+            border: 2px solid #C9A961;
+            padding: 8px;
+            background: #fff;
+            box-shadow: 0 2px 8px rgba(201, 169, 97, 0.2);
         }
 
         .alert {
@@ -664,6 +666,9 @@
                     <a class="nav-link" data-bs-toggle="tab" href="#addProductTab">➕ Ajouter Produit</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#imagesTab">🖼️ Mes Images</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" data-bs-toggle="tab" href="#configTab">🌐 Configuration</a>
                 </li>
                 <li class="nav-item">
@@ -740,21 +745,21 @@
                                 <div class="mb-3">
                                     <label class="form-label">Image Produit *</label>
                                     <div class="image-tabs">
-                                        <button type="button" class="image-tab-btn active" onclick="switchImageMode('url')">🔗 URL</button>
-                                        <button type="button" class="image-tab-btn" onclick="switchImageMode('file')">📁 Fichier</button>
+                                        <button type="button" class="image-tab-btn active" onclick="switchImageMode('file')">📁 Fichier</button>
                                         <button type="button" class="image-tab-btn" onclick="openImageGallery('productImage')">🎨 Galerie</button>
+                                        <button type="button" class="image-tab-btn" onclick="switchImageMode('url')">🔗 URL</button>
                                     </div>
-                                    
-                                    <div id="urlSection">
-                                        <input type="text" id="productImage" class="form-control" placeholder="https://images.unsplash.com/...">
-                                    </div>
-                                    
-                                    <div id="fileSection" style="display: none;">
-                                        <label class="file-input-label">
+
+                                    <div id="fileSection">
+                                        <label class="file-input-label" for="productImageFile">
                                             <i class="fas fa-cloud-upload-alt"></i><br>
                                             Cliquez pour sélectionner une image
                                         </label>
                                         <input type="file" id="productImageFile" accept="image/*" onchange="handleImageUpload(event, 'productImage')">
+                                    </div>
+
+                                    <div id="urlSection" style="display: none;">
+                                        <input type="text" id="productImage" class="form-control" placeholder="https://example.com/image.jpg">
                                     </div>
                                     <img id="productPreview" class="image-preview" style="display: none;">
                                 </div>
@@ -777,16 +782,49 @@
                             <div class="card">
                                 <div class="card-header">💡 Conseils Images</div>
                                 <div class="card-body">
-                                    <p><strong>Deux options:</strong></p>
+                                    <p><strong>Trois options:</strong></p>
                                     <ul style="font-size: 12px;">
-                                        <li><strong>🔗 URL:</strong> Lien image en ligne</li>
-                                        <li><strong>📁 Fichier:</strong> Depuis votre ordinateur</li>
+                                        <li><strong>📁 Fichier (Recommandé):</strong> Uploadez depuis votre téléphone/ordinateur. Images compressées automatiquement.</li>
+                                        <li><strong>🎨 Galerie:</strong> Choisissez parmi vos images déjà uploadées</li>
+                                        <li><strong>🔗 URL:</strong> Lien image en ligne (optionnel)</li>
                                     </ul>
                                     <hr>
-                                    <p><strong>Unsplash (gratuit):</strong></p>
-                                    <a href="https://unsplash.com" target="_blank" style="font-size: 12px;">unsplash.com</a>
+                                    <p style="font-size: 11px;"><strong>⚠️ Conseil:</strong> Privilégiez l'upload de fichiers pour une meilleure performance!</p>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Images Tab -->
+                <div id="imagesTab" class="tab-pane fade">
+                    <h3 class="mb-4">🖼️ Gestion des Images</h3>
+                    
+                    <div class="card mb-4">
+                        <div class="card-header">📤 Uploader une Image</div>
+                        <div class="card-body">
+                            <div class="form-group mb-3">
+                                <label class="form-label">Sélectionnez une image (max 2MB)</label>
+                                <input type="file" id="galleryImageFile" accept="image/*" class="form-control">
+                                <small class="text-muted">Les images seront compressées automatiquement</small>
+                            </div>
+                            <div id="uploadProgress" style="display: none;">
+                                <div class="progress">
+                                    <div class="progress-bar" role="progressbar" style="width: 0%;" id="uploadBar"></div>
+                                </div>
+                                <p class="text-muted small mt-2">⏳ Upload en cours...</p>
+                            </div>
+                            <button class="btn btn-primary" onclick="uploadGalleryImage()">📤 Uploader</button>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">💾 Mes Images Uploadées</div>
+                        <div class="card-body">
+                            <div id="imagesGallery" class="row" style="gap: 15px;">
+                                <!-- Images générées dynamiquement -->
+                            </div>
+                            <p id="noImagesMsg" class="text-muted text-center mt-3">Aucune image uploadée pour le moment</p>
                         </div>
                     </div>
                 </div>
@@ -893,7 +931,7 @@
                                         </div>
                                         
                                         <div id="logoFileSection" style="display: none;">
-                                            <label class="file-input-label">
+                                            <label class="file-input-label" for="logoImageFile">
                                                 <i class="fas fa-cloud-upload-alt"></i><br>
                                                 Cliquez pour sélectionner un logo
                                             </label>
@@ -1021,21 +1059,21 @@
                         <div class="mb-3">
                             <label class="form-label">Image</label>
                             <div class="image-tabs">
-                                <button type="button" class="image-tab-btn active" onclick="switchImageModeEdit('url')">🔗 URL</button>
-                                <button type="button" class="image-tab-btn" onclick="switchImageModeEdit('file')">📁 Fichier</button>
+                                <button type="button" class="image-tab-btn active" onclick="switchImageModeEdit('file')">📁 Fichier</button>
                                 <button type="button" class="image-tab-btn" onclick="openImageGallery('editProductImage')">🎨 Galerie</button>
+                                <button type="button" class="image-tab-btn" onclick="switchImageModeEdit('url')">🔗 URL</button>
                             </div>
-                            
-                            <div id="editUrlSection">
-                                <input type="text" id="editProductImage" class="form-control" required>
-                            </div>
-                            
-                            <div id="editFileSection" style="display: none;">
-                                <label class="file-input-label">
+
+                            <div id="editFileSection">
+                                <label class="file-input-label" for="editProductImageFile">
                                     <i class="fas fa-cloud-upload-alt"></i><br>
                                     Cliquez pour sélectionner une image
                                 </label>
                                 <input type="file" id="editProductImageFile" accept="image/*" onchange="handleImageUpload(event, 'editProductImage')">
+                            </div>
+
+                            <div id="editUrlSection" style="display: none;">
+                                <input type="text" id="editProductImage" class="form-control" required>
                             </div>
                             <img id="editProductPreview" class="image-preview" style="display: none;">
                         </div>
