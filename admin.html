@@ -329,41 +329,79 @@
         /* ==================== RESPONSIVE ADMIN ==================== */
         @media (max-width: 768px) {
             .navbar-brand {
-                font-size: 18px;
+                font-size: 16px;
             }
 
             .logout-btn {
-                padding: 8px 16px;
-                font-size: 13px;
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+
+            .container-admin {
+                padding: 15px 10px;
+            }
+
+            h3 {
+                font-size: 20px;
             }
 
             .nav-tabs {
-                flex-wrap: wrap;
+                display: flex;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
                 gap: 5px;
+                padding: 8px 5px;
+            }
+
+            .nav-tabs::-webkit-scrollbar {
+                display: none;
             }
 
             .nav-link {
-                padding: 10px 12px !important;
-                font-size: 13px !important;
+                padding: 10px 16px !important;
+                font-size: 12px !important;
+                white-space: nowrap;
+                min-width: fit-content;
             }
 
             .card {
                 margin-bottom: 15px;
+                border-radius: 6px;
             }
 
             .card-header {
-                font-size: 16px;
-                padding: 12px;
+                font-size: 15px;
+                padding: 10px 12px;
+            }
+
+            .card-body {
+                padding: 15px;
             }
 
             .form-control, .form-select {
-                font-size: 13px;
-                padding: 8px 10px;
+                font-size: 14px;
+                padding: 10px;
             }
 
-            .btn-primary {
+            .form-label {
+                font-size: 13px;
+                margin-bottom: 6px;
+            }
+
+            .btn-primary, .btn-secondary, .btn-warning {
                 padding: 10px 16px;
-                font-size: 15px;
+                font-size: 14px;
+                width: 100%;
+            }
+
+            .btn-group {
+                width: 100%;
+            }
+
+            .btn-group button {
+                font-size: 12px;
+                padding: 8px;
             }
 
             .row {
@@ -371,20 +409,42 @@
                 margin-left: 0;
             }
 
-            .col-md-6 {
-                padding: 8px;
+            .col-md-6, .col-md-3, .col-md-12 {
+                padding: 5px;
             }
 
-            .image-tabs {
-                display: flex;
-                gap: 10px;
-                margin-bottom: 10px;
+            .mb-3 {
+                margin-bottom: 12px !important;
             }
 
-            .image-tab-btn {
-                flex: 1;
-                padding: 8px 12px;
+            .mb-4 {
+                margin-bottom: 20px !important;
+            }
+
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 15px;
+            }
+
+            .product-card img {
+                height: 120px;
+            }
+
+            .product-card-title {
                 font-size: 13px;
+            }
+
+            .product-card-price {
+                font-size: 14px;
+            }
+
+            .image-preview {
+                max-width: 150px;
+                max-height: 150px;
+            }
+
+            textarea {
+                min-height: 80px !important;
             }
         }
 
@@ -394,62 +454,59 @@
             }
 
             .login-container {
-                padding: 10px;
+                padding: 15px;
             }
 
             .login-card {
-                padding: 20px;
-                border-radius: 8px;
+                padding: 25px;
+                border-radius: 10px;
             }
 
             .navbar {
-                padding: 8px 0;
-            }
-
-            .navbar-brand {
-                font-size: 16px;
-            }
-
-            .container-fluid {
-                padding: 10px;
-            }
-
-            .logout-btn {
-                padding: 6px 12px;
-                font-size: 12px;
-            }
-
-            .container-admin {
-                padding: 10px;
-            }
-
-            .nav-tabs {
-                flex-direction: column;
-                gap: 0;
-            }
-
-            .nav-link {
-                border-radius: 0 !important;
-                padding: 10px 12px !important;
-                font-size: 13px !important;
-                text-align: left;
-            }
-
-            .nav-link.active {
-                border-left: 4px solid #C9A961 !important;
-            }
-
-            .tab-pane {
                 padding: 10px 0;
             }
 
+            .navbar-brand {
+                font-size: 14px;
+            }
+
+            .logout-btn {
+                padding: 5px 10px;
+                font-size: 11px;
+            }
+
+            .container-admin {
+                padding: 10px 5px;
+            }
+
+            h3 {
+                font-size: 18px;
+                margin-bottom: 15px !important;
+            }
+
+            .nav-tabs {
+                overflow-x: auto;
+                display: flex;
+                gap: 3px;
+                padding: 5px;
+            }
+
+            .nav-link {
+                font-size: 11px !important;
+                padding: 8px 12px !important;
+            }
+
+            .tab-content {
+                padding: 15px 10px;
+            }
+
             .card {
-                border-radius: 6px;
+                border-radius: 8px;
                 margin-bottom: 12px;
             }
 
             .card-header {
-                font-size: 15px;
+                font-size: 14px;
                 padding: 10px;
             }
 
@@ -457,74 +514,79 @@
                 padding: 12px;
             }
 
-            .form-group {
-                margin-bottom: 10px;
-            }
-
             .form-label {
                 font-size: 12px;
                 margin-bottom: 5px;
             }
 
-            .form-control, .form-select {
+            .form-control, .form-select, textarea {
                 font-size: 13px;
-                padding: 8px;
-                height: auto;
+                padding: 9px;
             }
 
-            .btn-primary, .btn-secondary, .btn-warning, .btn-danger {
-                padding: 8px 12px;
-                font-size: 12px;
-                width: 100%;
-                margin-bottom: 8px;
+            textarea {
+                min-height: 70px !important;
             }
 
-            .col-md-6 {
+            .btn-primary, .btn-secondary, .btn-warning {
+                padding: 9px 14px;
+                font-size: 13px;
+            }
+
+            .btn-group button {
+                font-size: 11px;
+                padding: 7px;
+            }
+
+            .col-md-6, .col-md-3, .col-md-12 {
                 padding: 5px;
             }
 
-            .row {
-                margin-right: -5px;
-                margin-left: -5px;
-            }
-
             .mb-3 {
-                margin-bottom: 8px !important;
+                margin-bottom: 10px !important;
             }
 
-            .mt-3 {
-                margin-top: 8px !important;
+            .mb-4 {
+                margin-bottom: 15px !important;
+            }
+
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+
+            .product-card img {
+                height: 100px;
+            }
+
+            .product-card-body {
+                padding: 10px;
+            }
+
+            .product-card-title {
+                font-size: 12px;
+            }
+
+            .product-card-price {
+                font-size: 13px;
+            }
+
+            .product-card-actions button {
+                font-size: 10px;
+                padding: 6px;
             }
 
             .image-preview {
-                max-width: 100px;
-                max-height: 100px;
-            }
-
-            .product-card {
-                margin-bottom: 10px;
-            }
-
-            .product-card-actions {
-                gap: 5px;
-            }
-
-            .btn-edit-card, .btn-delete-card {
-                padding: 6px 10px;
-                font-size: 11px;
-                flex: 1;
+                max-width: 120px;
+                max-height: 120px;
             }
 
             .modal-dialog {
                 margin: 10px;
             }
 
-            .modal-content {
-                border-radius: 6px;
-            }
-
-            .modal-header, .modal-footer {
-                padding: 10px;
+            .modal-header {
+                padding: 12px;
             }
 
             .modal-body {
@@ -532,99 +594,21 @@
             }
 
             .modal-title {
-                font-size: 16px;
-            }
-
-            .file-input-label {
-                padding: 20px;
-                font-size: 12px;
-            }
-
-            .image-tabs {
-                display: flex;
-                gap: 5px;
-                margin-bottom: 8px;
-            }
-
-            .image-tab-btn {
-                flex: 1;
-                padding: 6px 8px;
-                font-size: 11px;
-            }
-
-            .image-tab-btn.active {
-                background-color: #C9A961;
-                color: white;
-            }
-
-            input[type="file"] {
-                font-size: 12px;
+                font-size: 15px;
             }
 
             .alert {
                 font-size: 12px;
-                padding: 8px 12px;
-                margin-bottom: 8px;
+                padding: 8px;
             }
 
             .security-info {
-                font-size: 12px;
-                padding: 10px;
-            }
-
-            /* PRODUCTS TABLE */
-            .cart-table {
                 font-size: 11px;
-            }
-
-            .cart-table th, .cart-table td {
-                padding: 6px 4px;
-            }
-
-            .cart-table img {
-                max-width: 40px;
-                max-height: 40px;
-            }
-
-            /* FORMS */
-            .form-control:focus {
-                font-size: 13px;
-            }
-
-            .btn-group {
-                width: 100%;
-                gap: 5px;
+                padding: 10px;
             }
 
             .text-muted {
                 font-size: 11px;
-            }
-        }
-
-        @media (max-width: 380px) {
-            .navbar-brand {
-                font-size: 14px;
-            }
-
-            .login-card {
-                padding: 15px;
-            }
-
-            .card-header {
-                font-size: 13px;
-            }
-
-            .form-label {
-                font-size: 11px;
-            }
-
-            .btn-primary, .btn-secondary {
-                padding: 6px 10px;
-                font-size: 11px;
-            }
-
-            .nav-link {
-                font-size: 11px !important;
             }
         }
     </style>
@@ -660,16 +644,13 @@
 
             <ul class="nav nav-tabs" role="tablist">
                 <li class="nav-item">
-                    <a class="nav-link active" data-bs-toggle="tab" href="#productsTab">📦 Mes Produits</a>
+                    <a class="nav-link active" data-bs-toggle="tab" href="#siteContentTab">🌐 Contenu du Site</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="tab" href="#addProductTab">➕ Ajouter Produit</a>
+                    <a class="nav-link" data-bs-toggle="tab" href="#productsTab">📦 Produits</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="tab" href="#imagesTab">🖼️ Mes Images</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="tab" href="#configTab">🌐 Configuration</a>
+                    <a class="nav-link" data-bs-toggle="tab" href="#addProductTab">➕ Ajouter</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" data-bs-toggle="tab" href="#settingsTab">⚙️ Paramètres</a>
@@ -677,7 +658,115 @@
             </ul>
 
             <div class="tab-content">
-                <div id="productsTab" class="tab-pane fade show active">
+                <!-- SITE CONTENT TAB -->
+                <div id="siteContentTab" class="tab-pane fade show active">
+                    <h3 class="mb-4">🌐 Modifier le Contenu du Site Principal</h3>
+
+                    <div class="row">
+                        <!-- Section Textes -->
+                        <div class="col-md-6 mb-4">
+                            <div class="card">
+                                <div class="card-header">📝 Textes de la Page d'Accueil</div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label class="form-label">Titre Principal</label>
+                                        <input type="text" id="heroTitle" class="form-control" placeholder="KESIARA GOLDEN">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Sous-titre</label>
+                                        <input type="text" id="heroSubtitle" class="form-control" placeholder="Bijoux d'exception en or massif">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Titre Section "À Propos"</label>
+                                        <input type="text" id="aboutTitle" class="form-control" placeholder="À PROPOS">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Texte "À Propos" (Paragraphe 1)</label>
+                                        <textarea id="aboutText1" class="form-control" rows="3"></textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Texte "À Propos" (Paragraphe 2)</label>
+                                        <textarea id="aboutText2" class="form-control" rows="3"></textarea>
+                                    </div>
+                                    <button class="btn btn-primary w-100" onclick="saveSiteTexts()">💾 Enregistrer les Textes</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section Images -->
+                        <div class="col-md-6 mb-4">
+                            <div class="card">
+                                <div class="card-header">🖼️ Images du Site</div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label class="form-label">Logo du Site</label>
+                                        <div class="btn-group w-100 mb-2" role="group">
+                                            <button type="button" class="btn btn-outline-secondary active" onclick="switchSiteImageMode('logo', 'url')">🔗 URL</button>
+                                            <button type="button" class="btn btn-outline-secondary" onclick="switchSiteImageMode('logo', 'file')">📁 Fichier</button>
+                                        </div>
+                                        <input type="text" id="siteLogoUrl" class="form-control mb-2" placeholder="https://... ou Assets/LOGO.png">
+                                        <input type="file" id="siteLogoFile" class="form-control" style="display: none;" accept="image/*" onchange="handleSiteImageUpload(event, 'logo')">
+                                        <img id="siteLogoPreview" class="image-preview" style="display: none;">
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Image Hero (Arrière-plan Accueil)</label>
+                                        <div class="btn-group w-100 mb-2" role="group">
+                                            <button type="button" class="btn btn-outline-secondary active" onclick="switchSiteImageMode('hero', 'url')">🔗 URL</button>
+                                            <button type="button" class="btn btn-outline-secondary" onclick="switchSiteImageMode('hero', 'file')">📁 Fichier</button>
+                                        </div>
+                                        <input type="text" id="siteHeroUrl" class="form-control mb-2" placeholder="https://...">
+                                        <input type="file" id="siteHeroFile" class="form-control" style="display: none;" accept="image/*" onchange="handleSiteImageUpload(event, 'hero')">
+                                        <img id="siteHeroPreview" class="image-preview" style="display: none;">
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Logo Section "À Propos"</label>
+                                        <div class="btn-group w-100 mb-2" role="group">
+                                            <button type="button" class="btn btn-outline-secondary active" onclick="switchSiteImageMode('about', 'url')">🔗 URL</button>
+                                            <button type="button" class="btn btn-outline-secondary" onclick="switchSiteImageMode('about', 'file')">📁 Fichier</button>
+                                        </div>
+                                        <input type="text" id="siteAboutUrl" class="form-control mb-2" placeholder="https://... ou Assets/LOGO.png">
+                                        <input type="file" id="siteAboutFile" class="form-control" style="display: none;" accept="image/*" onchange="handleSiteImageUpload(event, 'about')">
+                                        <img id="siteAboutPreview" class="image-preview" style="display: none;">
+                                    </div>
+
+                                    <button class="btn btn-primary w-100" onclick="saveSiteImages()">💾 Enregistrer les Images</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section Contact -->
+                        <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header">📞 Informations de Contact</div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-3 mb-3">
+                                            <label class="form-label">WhatsApp</label>
+                                            <input type="text" id="siteWhatsapp" class="form-control" placeholder="+226...">
+                                        </div>
+                                        <div class="col-md-3 mb-3">
+                                            <label class="form-label">Téléphone</label>
+                                            <input type="text" id="sitePhone" class="form-control" placeholder="+226...">
+                                        </div>
+                                        <div class="col-md-3 mb-3">
+                                            <label class="form-label">Email</label>
+                                            <input type="email" id="siteEmail" class="form-control" placeholder="contact@...">
+                                        </div>
+                                        <div class="col-md-3 mb-3">
+                                            <label class="form-label">Adresse</label>
+                                            <input type="text" id="siteAddress" class="form-control" placeholder="Ouagadougou...">
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary w-100" onclick="saveSiteContact()">💾 Enregistrer les Contacts</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="productsTab" class="tab-pane fade">
                     <h3 class="mb-4">📋 Liste des Produits</h3>
                     <div id="productsContainer" class="products-grid"></div>
                 </div>
@@ -744,23 +833,13 @@
 
                                 <div class="mb-3">
                                     <label class="form-label">Image Produit *</label>
-                                    <div class="image-tabs">
-                                        <button type="button" class="image-tab-btn active" onclick="switchImageMode('file')">📁 Fichier</button>
-                                        <button type="button" class="image-tab-btn" onclick="openImageGallery('productImage')">🎨 Galerie</button>
-                                        <button type="button" class="image-tab-btn" onclick="switchImageMode('url')">🔗 URL</button>
+                                    <div class="btn-group w-100 mb-2" role="group">
+                                        <button type="button" class="btn btn-outline-secondary active" onclick="switchProductImageMode('url')">🔗 URL</button>
+                                        <button type="button" class="btn btn-outline-secondary" onclick="switchProductImageMode('file')">📁 Fichier</button>
                                     </div>
 
-                                    <div id="fileSection">
-                                        <label class="file-input-label" for="productImageFile">
-                                            <i class="fas fa-cloud-upload-alt"></i><br>
-                                            Cliquez pour sélectionner une image
-                                        </label>
-                                        <input type="file" id="productImageFile" accept="image/*" onchange="handleImageUpload(event, 'productImage')">
-                                    </div>
-
-                                    <div id="urlSection" style="display: none;">
-                                        <input type="text" id="productImage" class="form-control" placeholder="https://example.com/image.jpg">
-                                    </div>
+                                    <input type="text" id="productImageUrl" class="form-control mb-2" placeholder="https://..." required>
+                                    <input type="file" id="productImageFile" class="form-control" style="display: none;" accept="image/*" onchange="handleProductImageUpload(event)">
                                     <img id="productPreview" class="image-preview" style="display: none;">
                                 </div>
 
@@ -780,178 +859,21 @@
                         </div>
                         <div class="col-md-4">
                             <div class="card">
-                                <div class="card-header">💡 Conseils Images</div>
+                                <div class="card-header">💡 Conseils</div>
                                 <div class="card-body">
-                                    <p><strong>Trois options:</strong></p>
-                                    <ul style="font-size: 12px;">
-                                        <li><strong>📁 Fichier (Recommandé):</strong> Uploadez depuis votre téléphone/ordinateur. Images compressées automatiquement.</li>
-                                        <li><strong>🎨 Galerie:</strong> Choisissez parmi vos images déjà uploadées</li>
-                                        <li><strong>🔗 URL:</strong> Lien image en ligne (optionnel)</li>
+                                    <p><strong>Upload d'Images:</strong></p>
+                                    <ul style="font-size: 13px;">
+                                        <li><strong>🔗 URL:</strong> Utilisez un lien direct vers une image (ex: Unsplash, votre hébergement)</li>
+                                        <li><strong>📁 Fichier:</strong> Uploadez depuis votre appareil. L'image sera convertie en base64 et stockée localement.</li>
                                     </ul>
                                     <hr>
-                                    <p style="font-size: 11px;"><strong>⚠️ Conseil:</strong> Privilégiez l'upload de fichiers pour une meilleure performance!</p>
+                                    <p style="font-size: 12px;"><strong>⚠️ Note:</strong> Les fichiers seront automatiquement compressés pour optimiser les performances.</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Images Tab -->
-                <div id="imagesTab" class="tab-pane fade">
-                    <h3 class="mb-4">🖼️ Gestion des Images</h3>
-                    
-                    <div class="card mb-4">
-                        <div class="card-header">📤 Uploader une Image</div>
-                        <div class="card-body">
-                            <div class="form-group mb-3">
-                                <label class="form-label">Sélectionnez une image (max 2MB)</label>
-                                <input type="file" id="galleryImageFile" accept="image/*" class="form-control">
-                                <small class="text-muted">Les images seront compressées automatiquement</small>
-                            </div>
-                            <div id="uploadProgress" style="display: none;">
-                                <div class="progress">
-                                    <div class="progress-bar" role="progressbar" style="width: 0%;" id="uploadBar"></div>
-                                </div>
-                                <p class="text-muted small mt-2">⏳ Upload en cours...</p>
-                            </div>
-                            <button class="btn btn-primary" onclick="uploadGalleryImage()">📤 Uploader</button>
-                        </div>
-                    </div>
-
-                    <div class="card">
-                        <div class="card-header">💾 Mes Images Uploadées</div>
-                        <div class="card-body">
-                            <div id="imagesGallery" class="row" style="gap: 15px;">
-                                <!-- Images générées dynamiquement -->
-                            </div>
-                            <p id="noImagesMsg" class="text-muted text-center mt-3">Aucune image uploadée pour le moment</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Configuration Tab -->
-                <div id="configTab" class="tab-pane fade">
-                    <h3 class="mb-4">🌐 Configuration du Site</h3>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="card">
-                                <div class="card-header">📱 WhatsApp & Contact</div>
-                                <div class="card-body">
-                                    <div class="form-group mb-3">
-                                        <label class="form-label">Numéro WhatsApp</label>
-                                        <div class="input-group">
-                                            <span class="input-group-text">+</span>
-                                            <input type="text" id="whatsappNumber" class="form-control" placeholder="226072709..." value="">
-                                        </div>
-                                        <small class="text-muted">Sans espaces ni caractères spéciaux</small>
-                                    </div>
-                                    <div class="form-group mb-3">
-                                        <label class="form-label">Message WhatsApp par défaut</label>
-                                        <input type="text" id="whatsappMessage" class="form-control" placeholder="Je suis intéressé par" value="">
-                                    </div>
-                                    <div class="form-group mb-3">
-                                        <label class="form-label">Téléphone</label>
-                                        <input type="text" id="phone" class="form-control" placeholder="+226 07 27 09 82" value="">
-                                    </div>
-                                    <div class="form-group mb-3">
-                                        <label class="form-label">Email</label>
-                                        <input type="email" id="email" class="form-control" placeholder="info@kesiara-golden.bf" value="">
-                                    </div>
-                                    <button class="btn btn-primary" onclick="saveContactConfig()">💾 Enregistrer</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="card">
-                                <div class="card-header">💰 Taxes & Frais</div>
-                                <div class="card-body">
-                                    <div class="form-group mb-3">
-                                        <label class="form-label">Taux de TVA/Taxe (%)</label>
-                                        <div class="input-group">
-                                            <input type="number" id="taxRate" class="form-control" placeholder="18" value="" min="0" max="100">
-                                            <span class="input-group-text">%</span>
-                                        </div>
-                                        <small class="text-muted">Appliqué automatiquement au panier</small>
-                                    </div>
-                                    <div class="form-group mb-3">
-                                        <label class="form-label">Informations Livraison</label>
-                                        <input type="text" id="shippingInfo" class="form-control" placeholder="Livraison gratuite..." value="">
-                                    </div>
-                                    <div class="form-group mb-3">
-                                        <label class="form-label">Délai Livraison</label>
-                                        <input type="text" id="deliveryTime" class="form-control" placeholder="2-3 jours ouvrables" value="">
-                                    </div>
-                                    <button class="btn btn-primary" onclick="saveTaxConfig()">💾 Enregistrer</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row mt-4">
-                        <div class="col-md-6">
-                            <div class="card">
-                                <div class="card-header">📝 Texte du Site</div>
-                                <div class="card-body">
-                                    <div class="form-group mb-3">
-                                        <label class="form-label">Nom du Site</label>
-                                        <input type="text" id="siteName" class="form-control" placeholder="Kesiara Golden" value="">
-                                    </div>
-                                    <div class="form-group mb-3">
-                                        <label class="form-label">Slogan</label>
-                                        <input type="text" id="siteTagline" class="form-control" placeholder="Bijoux de Luxe - Or 18K" value="">
-                                    </div>
-                                    <div class="form-group mb-3">
-                                        <label class="form-label">Titre Accueil</label>
-                                        <input type="text" id="homepageTitle" class="form-control" placeholder="KESIARA GOLDEN" value="">
-                                    </div>
-                                    <div class="form-group mb-3">
-                                        <label class="form-label">Sous-titre Accueil</label>
-                                        <input type="text" id="homepageSubtitle" class="form-control" placeholder="Bijoux de Luxe - Or 18K" value="">
-                                    </div>
-                                    <button class="btn btn-primary" onclick="saveTextConfig()">💾 Enregistrer</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="card">
-                                <div class="card-header">🖼️ Logo & Branding</div>
-                                <div class="card-body">
-                                    <div class="form-group mb-3">
-                                        <label class="form-label">Logo</label>
-                                        <div class="image-tabs" style="margin-bottom: 10px;">
-                                            <button type="button" class="image-tab-btn active" onclick="switchLogoMode('url')">🔗 URL</button>
-                                            <button type="button" class="image-tab-btn" onclick="switchLogoMode('file')">📁 Fichier</button>
-                                        </div>
-                                        
-                                        <div id="logoUrlSection">
-                                            <input type="text" id="logo" class="form-control" placeholder="Assets/LOGO.png ou https://..." value="">
-                                            <small class="text-muted">Chemin ou URL de l'image</small>
-                                        </div>
-                                        
-                                        <div id="logoFileSection" style="display: none;">
-                                            <label class="file-input-label" for="logoImageFile">
-                                                <i class="fas fa-cloud-upload-alt"></i><br>
-                                                Cliquez pour sélectionner un logo
-                                            </label>
-                                            <input type="file" id="logoImageFile" accept="image/*" onchange="handleLogoUpload(event)">
-                                        </div>
-                                    </div>
-                                    <div class="form-group mb-3">
-                                        <label class="form-label">Adresse</label>
-                                        <input type="text" id="address" class="form-control" placeholder="Ouagadougou, Burkina Faso" value="">
-                                    </div>
-                                    <div class="form-group mb-3">
-                                        <label class="form-label">Prévisualisation Logo</label>
-                                        <img id="logoPreview" style="max-width: 100%; max-height: 120px; margin-top: 10px; border-radius: 4px; border: 1px solid #ddd; padding: 5px; display: none;">
-                                    </div>
-                                    <button class="btn btn-primary" onclick="saveBrandConfig()">💾 Enregistrer</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
                 <div id="settingsTab" class="tab-pane fade">
                     <h3 class="mb-4">⚙️ Paramètres</h3>
@@ -981,11 +903,11 @@
                                 <div class="card-header">💾 Données</div>
                                 <div class="card-body">
                                     <p>Gérez vos sauvegardes et réinitialisations.</p>
-                                    <button class="btn btn-primary mb-2" onclick="downloadData()">
+                                    <button class="btn btn-primary mb-2 w-100" onclick="downloadData()">
                                         <i class="fas fa-download"></i> Télécharger les données
                                     </button>
-                                    <button class="btn btn-warning" onclick="resetProducts()">
-                                        <i class="fas fa-redo"></i> Réinitialiser
+                                    <button class="btn btn-warning w-100" onclick="resetProducts()">
+                                        <i class="fas fa-redo"></i> Réinitialiser les Produits
                                     </button>
                                 </div>
                             </div>
@@ -1058,23 +980,13 @@
 
                         <div class="mb-3">
                             <label class="form-label">Image</label>
-                            <div class="image-tabs">
-                                <button type="button" class="image-tab-btn active" onclick="switchImageModeEdit('file')">📁 Fichier</button>
-                                <button type="button" class="image-tab-btn" onclick="openImageGallery('editProductImage')">🎨 Galerie</button>
-                                <button type="button" class="image-tab-btn" onclick="switchImageModeEdit('url')">🔗 URL</button>
+                            <div class="btn-group w-100 mb-2" role="group">
+                                <button type="button" class="btn btn-outline-secondary active" onclick="switchEditImageMode('url')">🔗 URL</button>
+                                <button type="button" class="btn btn-outline-secondary" onclick="switchEditImageMode('file')">📁 Fichier</button>
                             </div>
 
-                            <div id="editFileSection">
-                                <label class="file-input-label" for="editProductImageFile">
-                                    <i class="fas fa-cloud-upload-alt"></i><br>
-                                    Cliquez pour sélectionner une image
-                                </label>
-                                <input type="file" id="editProductImageFile" accept="image/*" onchange="handleImageUpload(event, 'editProductImage')">
-                            </div>
-
-                            <div id="editUrlSection" style="display: none;">
-                                <input type="text" id="editProductImage" class="form-control" required>
-                            </div>
+                            <input type="text" id="editProductImageUrl" class="form-control mb-2" placeholder="https://..." required>
+                            <input type="file" id="editProductImageFile" class="form-control" style="display: none;" accept="image/*" onchange="handleEditImageUpload(event)">
                             <img id="editProductPreview" class="image-preview" style="display: none;">
                         </div>
 
@@ -1097,22 +1009,6 @@
         </div>
     </div>
 
-    <!-- IMAGE GALLERY MODAL -->
-    <div class="modal fade" id="galleryModal" tabindex="-1">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">🎨 Galerie d'Images</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row" id="galleryGrid" style="gap: 10px;">
-                        <!-- Images générées dynamiquement -->
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="config.js"></script>

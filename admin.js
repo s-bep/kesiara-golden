@@ -1,7 +1,3 @@
-// ============ AUTHENTICATION - SYSTÈME SÉCURISÉ ============
-// ⚠️ Le mot de passe est stocké en localStorage (côté client)
-// Format: SHA-256 hash
-
 class AuthManager {
     constructor() {
         this.storageKey = 'kesiara_auth';
@@ -10,20 +6,17 @@ class AuthManager {
 
     initializeAuth() {
         if (!localStorage.getItem(this.storageKey)) {
-            // Hash du mot de passe par défaut '226kesiara'
-            // Généré avec: SHA256('226kesiara')
             const defaultHash = this.simpleHash('226kesiara');
             localStorage.setItem(this.storageKey, defaultHash);
         }
     }
 
-    // Simple hash pour démonstration (non recommandé pour production)
     simpleHash(str) {
         let hash = 0;
         for (let i = 0; i < str.length; i++) {
             const char = str.charCodeAt(i);
             hash = ((hash << 5) - hash) + char;
-            hash = hash & hash; // Convertir en 32-bit integer
+            hash = hash & hash;
         }
         return 'hash_' + Math.abs(hash).toString(36);
     }
@@ -41,32 +34,18 @@ class AuthManager {
 
 const auth = new AuthManager();
 
-// ============ IMAGE MANAGEMENT ============
-class ImageManager {
-    constructor() {
-        this.storageKey = 'kesiara_images';
-        this.maxSize = 2 * 1024 * 1024; // 2MB
-        this.initializeStorage();
-    }
-
-    initializeStorage() {
-        if (!localStorage.getItem(this.storageKey)) {
-            localStorage.setItem(this.storageKey, JSON.stringify({}));
-        }
-    }
-
-    // Compresser l'image avant stockage
-    async compressImage(base64String) {
-        return new Promise((resolve) => {
+async function compressImageToBase64(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
             const img = new Image();
-            img.src = base64String;
-            
+            img.src = e.target.result;
+
             img.onload = () => {
                 const canvas = document.createElement('canvas');
                 let width = img.width;
                 let height = img.height;
-                
-                // Redimensionner si trop grand
+
                 const maxDim = 800;
                 if (width > height) {
                     if (width > maxDim) {
@@ -79,83 +58,24 @@ class ImageManager {
                         height = maxDim;
                     }
                 }
-                
+
                 canvas.width = width;
                 canvas.height = height;
                 const ctx = canvas.getContext('2d');
                 ctx.drawImage(img, 0, 0, width, height);
-                
-                // Compresser en JPEG
+
                 const compressed = canvas.toDataURL('image/jpeg', 0.75);
                 resolve(compressed);
             };
-            
-            img.onerror = () => resolve(base64String);
-        });
-    }
 
-    async addImage(file) {
-        return new Promise((resolve, reject) => {
-            // Vérifier la taille
-            if (file.size > this.maxSize) {
-                reject(`Image trop volumineux (max ${this.maxSize / 1024 / 1024}MB)`);
-                return;
-            }
+            img.onerror = () => reject('Erreur de chargement de l\'image');
+        };
 
-            const reader = new FileReader();
-            reader.onload = async (e) => {
-                try {
-                    const compressed = await this.compressImage(e.target.result);
-                    
-                    if (compressed.length > this.maxSize) {
-                        reject('L\'image compressée est encore trop volumineux');
-                        return;
-                    }
-
-                    const imageId = 'img_' + Date.now();
-                    const images = JSON.parse(localStorage.getItem(this.storageKey));
-                    images[imageId] = {
-                        id: imageId,
-                        data: compressed,
-                        name: file.name,
-                        date: new Date().toLocaleString('fr-FR')
-                    };
-                    
-                    localStorage.setItem(this.storageKey, JSON.stringify(images));
-                    resolve({ id: imageId, ...images[imageId] });
-                } catch (err) {
-                    reject(err.message);
-                }
-            };
-            
-            reader.onerror = () => reject('Erreur de lecture du fichier');
-            reader.readAsDataURL(file);
-        });
-    }
-
-    getAll() {
-        return Object.values(JSON.parse(localStorage.getItem(this.storageKey) || '{}'));
-    }
-
-    getById(id) {
-        const images = JSON.parse(localStorage.getItem(this.storageKey));
-        return images[id];
-    }
-
-    deleteImage(id) {
-        const images = JSON.parse(localStorage.getItem(this.storageKey));
-        delete images[id];
-        localStorage.setItem(this.storageKey, JSON.stringify(images));
-    }
-
-    clear() {
-        localStorage.setItem(this.storageKey, JSON.stringify({}));
-    }
+        reader.onerror = () => reject('Erreur de lecture du fichier');
+        reader.readAsDataURL(file);
+    });
 }
 
-const imgManager = new ImageManager();
-
-// ============ PRODUCT MANAGEMENT ============
 class ProductManager {
     constructor() {
         this.storageKey = 'kesiara_products';
@@ -164,146 +84,7 @@ class ProductManager {
 
     initializeStorage() {
         if (!localStorage.getItem(this.storageKey)) {
-            // Import products from main script.js
-            const defaultProducts = [
-                {
-                    id: 1,
-                    name: "Collier Or 18K Chaîne Classique",
-                    category: "Colliers",
-                    gender: "Femme",
-                    material: "Or 18K",
-                    price: 245000,
-                    image: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=500&h=500&fit=crop",
-                    images: ["https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=500&h=500&fit=crop", "https://images.unsplash.com/photo-1509941943102-7a002ba0d37b?w=500&h=500&fit=crop"],
-                    description: "Élégant collier en or 18K avec chaîne classique. Parfait pour toute occasion.",
-                    weight: "2.5g",
-                    dimensions: "45cm",
-                    stock: 5,
-                    isFeatured: true
-                },
-                {
-                    id: 2,
-                    name: "Boucles d'Oreilles Plaqué Or Perles",
-                    category: "Boucles d'oreilles",
-                    gender: "Femme",
-                    material: "Plaqué Or",
-                    price: 89000,
-                    image: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=500&h=500&fit=crop",
-                    images: ["https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=500&h=500&fit=crop"],
-                    description: "Élégantes boucles d'oreilles en plaqué or avec perles. Brillance garantie.",
-                    weight: "1.2g",
-                    dimensions: "20mm",
-                    stock: 12,
-                    isFeatured: true
-                },
-                {
-                    id: 3,
-                    name: "Bracelet Or Homme Maillé",
-                    category: "Bracelets",
-                    gender: "Homme",
-                    material: "Or 14K",
-                    price: 365000,
-                    image: "https://images.unsplash.com/photo-1599643478518-e00d9d8c5512?w=500&h=500&fit=crop",
-                    images: ["https://images.unsplash.com/photo-1599643478518-e00d9d8c5512?w=500&h=500&fit=crop", "https://images.unsplash.com/photo-1515562141207-6811bcdd56cd?w=500&h=500&fit=crop"],
-                    description: "Bracelet homme robuste en or 14K avec mailles épaisses et élégantes.",
-                    weight: "18g",
-                    dimensions: "19cm",
-                    stock: 4,
-                    isFeatured: true
-                },
-                {
-                    id: 4,
-                    name: "Bague de Fiançailles Or Blanc",
-                    category: "Bagues",
-                    gender: "Femme",
-                    material: "Or blanc",
-                    price: 850000,
-                    image: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=500&h=500&fit=crop",
-                    images: ["https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=500&h=500&fit=crop"],
-                    description: "Magnifique bague de fiançailles en or blanc 18K. Le choix parfait pour un moment unique.",
-                    weight: "4g",
-                    dimensions: "Taille 8",
-                    stock: 2,
-                    isFeatured: true
-                },
-                {
-                    id: 5,
-                    name: "Ensemble Collier + Boucles Plaqué Or",
-                    category: "Ensembles",
-                    gender: "Femme",
-                    material: "Plaqué Or",
-                    price: 156000,
-                    image: "https://images.unsplash.com/photo-1599643478518-e00d9d8c5512?w=500&h=500&fit=crop",
-                    images: ["https://images.unsplash.com/photo-1599643478518-e00d9d8c5512?w=500&h=500&fit=crop"],
-                    description: "Ensemble élégant composé d'un collier et de boucles d'oreilles assortis.",
-                    weight: "5g",
-                    dimensions: "Collier 40cm, Boucles 15mm",
-                    stock: 7,
-                    isFeatured: false
-                },
-                {
-                    id: 6,
-                    name: "Chaîne Or Homme Figaro",
-                    category: "Chaînes",
-                    gender: "Homme",
-                    material: "Or 14K",
-                    price: 420000,
-                    image: "https://images.unsplash.com/photo-1599643478518-e00d9d8c5512?w=500&h=500&fit=crop",
-                    images: ["https://images.unsplash.com/photo-1599643478518-e00d9d8c5512?w=500&h=500&fit=crop"],
-                    description: "Chaîne Figaro classique pour homme en or 14K. Style intemporel.",
-                    weight: "15g",
-                    dimensions: "50cm",
-                    stock: 6,
-                    isFeatured: false
-                },
-                {
-                    id: 7,
-                    name: "Bracelet Femme Chaîne Plate",
-                    category: "Bracelets",
-                    gender: "Femme",
-                    material: "Or 18K",
-                    price: 195000,
-                    image: "https://images.unsplash.com/photo-1515562141207-6811bcdd56cd?w=500&h=500&fit=crop",
-                    images: ["https://images.unsplash.com/photo-1515562141207-6811bcdd56cd?w=500&h=500&fit=crop"],
-                    description: "Bracelet féminin avec chaîne plate en or 18K. Léger et confortable.",
-                    weight: "6g",
-                    dimensions: "18cm",
-                    stock: 9,
-                    isFeatured: false
-                },
-                {
-                    id: 8,
-                    name: "Bague Chevalière Homme Or",
-                    category: "Bagues",
-                    gender: "Homme",
-                    material: "Or 14K",
-                    price: 285000,
-                    image: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=500&h=500&fit=crop",
-                    images: ["https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=500&h=500&fit=crop"],
-                    description: "Bague chevalière masculine en or 14K. Symbole de prestige.",
-                    weight: "8g",
-                    dimensions: "Taille 10",
-                    stock: 3,
-                    isFeatured: false
-                },
-                {
-                    id: 9,
-                    name: "Boucles Chandelier Femme",
-                    category: "Boucles d'oreilles",
-                    gender: "Femme",
-                    material: "Plaqué Or",
-                    price: 76000,
-                    image: "https://images.unsplash.com/photo-1515562141207-6811bcdd56cd?w=500&h=500&fit=crop",
-                    images: ["https://images.unsplash.com/photo-1515562141207-6811bcdd56cd?w=500&h=500&fit=crop"],
-                    description: "Boucles chandelier en plaqué or. Design elegant et féminin.",
-                    weight: "2g",
-                    dimensions: "30mm",
-                    stock: 10,
-                    isFeatured: false
-                }
-            ];
-
-            localStorage.setItem(this.storageKey, JSON.stringify(defaultProducts));
+            localStorage.setItem(this.storageKey, JSON.stringify([]));
         }
     }
 
@@ -349,7 +130,6 @@ class ProductManager {
 
 const pm = new ProductManager();
 
-// ============ AUTHENTICATION FUNCTIONS ============
 function checkAuth() {
     const isLoggedIn = sessionStorage.getItem('adminLoggedIn');
     const loginScreen = document.getElementById('loginScreen');
@@ -362,7 +142,7 @@ function checkAuth() {
         loginScreen.style.display = 'none';
         adminPanel.style.display = 'block';
         loadProducts();
-        loadConfigUI();
+        loadSiteContent();
     }
 }
 
@@ -395,86 +175,220 @@ function logout() {
     }
 }
 
-// ============ IMAGE UPLOAD FUNCTIONS ============
-function handleImageUpload(event, fieldId) {
+function loadSiteContent() {
+    const config = configManager.getConfig();
+
+    // Textes
+    setValue('heroTitle', config.heroTitle || 'KESIARA GOLDEN');
+    setValue('heroSubtitle', config.heroSubtitle || 'Bijoux d\'exception en or massif');
+    setValue('aboutTitle', config.aboutTitle || 'À PROPOS');
+    setValue('aboutText1', config.aboutText1 || 'Kesiara Golden est une maison de bijouterie de luxe basée à Ouagadougou, Burkina Faso.');
+    setValue('aboutText2', config.aboutText2 || 'Chaque bijou est un symbole de prestige et de raffinement.');
+
+    // Images
+    setImageValue('siteLogoUrl', 'siteLogoPreview', config.logo || 'Assets/LOGO.png');
+    setImageValue('siteHeroUrl', 'siteHeroPreview', config.heroImage || 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=1200&h=1200&fit=crop');
+    setImageValue('siteAboutUrl', 'siteAboutPreview', config.aboutImage || 'Assets/LOGO.png');
+
+    // Contact
+    setValue('siteWhatsapp', config.whatsappNumber || '22607270982');
+    setValue('sitePhone', config.phone || '+226 07 27 09 82');
+    setValue('siteEmail', config.email || 'info@kesiara-golden.bf');
+    setValue('siteAddress', config.address || 'Ouagadougou, Burkina Faso');
+}
+
+function setValue(id, value) {
+    const el = document.getElementById(id);
+    if (el) el.value = value || '';
+}
+
+function setImageValue(urlId, previewId, value) {
+    const urlEl = document.getElementById(urlId);
+    const previewEl = document.getElementById(previewId);
+    if (urlEl) urlEl.value = value || '';
+    if (previewEl && value) {
+        previewEl.src = value;
+        previewEl.style.display = 'block';
+    }
+}
+
+function saveSiteTexts() {
+    const updates = {
+        heroTitle: document.getElementById('heroTitle').value,
+        heroSubtitle: document.getElementById('heroSubtitle').value,
+        aboutTitle: document.getElementById('aboutTitle').value,
+        aboutText1: document.getElementById('aboutText1').value,
+        aboutText2: document.getElementById('aboutText2').value,
+    };
+
+    configManager.updateMultiple(updates);
+    showMessage('✅ Textes du site mis à jour! Rafraîchissez la page d\'accueil pour voir les changements.', 'success');
+}
+
+function saveSiteImages() {
+    const updates = {
+        logo: document.getElementById('siteLogoUrl').value,
+        heroImage: document.getElementById('siteHeroUrl').value,
+        aboutImage: document.getElementById('siteAboutUrl').value,
+    };
+
+    configManager.updateMultiple(updates);
+    showMessage('✅ Images du site mises à jour! Rafraîchissez la page d\'accueil pour voir les changements.', 'success');
+}
+
+function saveSiteContact() {
+    const updates = {
+        whatsappNumber: document.getElementById('siteWhatsapp').value,
+        phone: document.getElementById('sitePhone').value,
+        email: document.getElementById('siteEmail').value,
+        address: document.getElementById('siteAddress').value,
+    };
+
+    configManager.updateMultiple(updates);
+    showMessage('✅ Informations de contact mises à jour!', 'success');
+}
+
+function switchSiteImageMode(imageType, mode) {
+    const urlInput = document.getElementById(`site${imageType.charAt(0).toUpperCase() + imageType.slice(1)}Url`);
+    const fileInput = document.getElementById(`site${imageType.charAt(0).toUpperCase() + imageType.slice(1)}File`);
+
+    // Update button states
+    const buttons = event.currentTarget.parentElement.querySelectorAll('button');
+    buttons.forEach(btn => btn.classList.remove('active'));
+    event.currentTarget.classList.add('active');
+
+    if (mode === 'url') {
+        urlInput.style.display = 'block';
+        fileInput.style.display = 'none';
+        fileInput.value = '';
+    } else {
+        urlInput.style.display = 'none';
+        fileInput.style.display = 'block';
+        urlInput.value = '';
+    }
+}
+
+async function handleSiteImageUpload(event, imageType) {
     const file = event.target.files[0];
     if (!file) return;
 
-    // Vérifier le type d'image
     if (!file.type.startsWith('image/')) {
-        showMessage('❌ Veuillez sélectionner une image valide (JPG, PNG, etc.)', 'error');
+        showMessage('❌ Veuillez sélectionner une image valide', 'error');
         return;
     }
 
-    // Vérifier la taille avant compression
-    const fileSizeMB = (file.size / (1024 * 1024)).toFixed(2);
-    showMessage(`⏳ Upload en cours... (${fileSizeMB}MB) - Compression et optimisation automatique`, 'success');
+    try {
+        showMessage('⏳ Compression de l\'image en cours...', 'success');
+        const base64Image = await compressImageToBase64(file);
 
-    imgManager.addImage(file).then(result => {
-        // Sauvegarder l'ID d'image dans le champ
-        document.getElementById(fieldId).value = result.id;
+        const urlInput = document.getElementById(`site${imageType.charAt(0).toUpperCase() + imageType.slice(1)}Url`);
+        const preview = document.getElementById(`site${imageType.charAt(0).toUpperCase() + imageType.slice(1)}Preview`);
 
-        // Afficher l'aperçu
-        const previewId = fieldId.replace('Image', 'Preview');
-        const preview = document.getElementById(previewId);
+        if (urlInput) urlInput.value = base64Image;
         if (preview) {
-            preview.src = result.data;
+            preview.src = base64Image;
             preview.style.display = 'block';
         }
 
-        const compressedSizeKB = Math.round(result.data.length / 1024);
-        showMessage(`✅ Image uploadée avec succès! Taille finale: ${compressedSizeKB}KB`, 'success');
-    }).catch(error => {
+        showMessage('✅ Image compressée avec succès!', 'success');
+    } catch (error) {
         showMessage('❌ Erreur: ' + error, 'error');
-        event.target.value = ''; // Réinitialiser le champ fichier
-    });
+        event.target.value = '';
+    }
 }
 
-function switchImageMode(mode) {
-    const urlInput = document.getElementById('productImage');
+function switchProductImageMode(mode) {
+    const urlInput = document.getElementById('productImageUrl');
     const fileInput = document.getElementById('productImageFile');
-    const urlSection = document.getElementById('urlSection');
-    const fileSection = document.getElementById('fileSection');
 
-    // Update button states
-    const buttons = event.currentTarget.parentElement.querySelectorAll('.image-tab-btn');
+    const buttons = event.currentTarget.parentElement.querySelectorAll('button');
     buttons.forEach(btn => btn.classList.remove('active'));
     event.currentTarget.classList.add('active');
 
     if (mode === 'url') {
-        urlSection.style.display = 'block';
-        fileSection.style.display = 'none';
+        urlInput.style.display = 'block';
+        fileInput.style.display = 'none';
         fileInput.value = '';
-    } else if (mode === 'file') {
-        urlSection.style.display = 'none';
-        fileSection.style.display = 'block';
+    } else {
+        urlInput.style.display = 'none';
+        fileInput.style.display = 'block';
         urlInput.value = '';
     }
 }
 
-function switchImageModeEdit(mode) {
-    const urlInput = document.getElementById('editProductImage');
+async function handleProductImageUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+        showMessage('❌ Veuillez sélectionner une image valide', 'error');
+        return;
+    }
+
+    try {
+        showMessage('⏳ Compression de l\'image en cours...', 'success');
+        const base64Image = await compressImageToBase64(file);
+
+        document.getElementById('productImageUrl').value = base64Image;
+        const preview = document.getElementById('productPreview');
+        if (preview) {
+            preview.src = base64Image;
+            preview.style.display = 'block';
+        }
+
+        showMessage('✅ Image compressée avec succès!', 'success');
+    } catch (error) {
+        showMessage('❌ Erreur: ' + error, 'error');
+        event.target.value = '';
+    }
+}
+
+function switchEditImageMode(mode) {
+    const urlInput = document.getElementById('editProductImageUrl');
     const fileInput = document.getElementById('editProductImageFile');
-    const urlSection = document.getElementById('editUrlSection');
-    const fileSection = document.getElementById('editFileSection');
 
-    // Update button states
-    const buttons = event.currentTarget.parentElement.querySelectorAll('.image-tab-btn');
+    const buttons = event.currentTarget.parentElement.querySelectorAll('button');
     buttons.forEach(btn => btn.classList.remove('active'));
     event.currentTarget.classList.add('active');
 
     if (mode === 'url') {
-        urlSection.style.display = 'block';
-        fileSection.style.display = 'none';
+        urlInput.style.display = 'block';
+        fileInput.style.display = 'none';
         fileInput.value = '';
-    } else if (mode === 'file') {
-        urlSection.style.display = 'none';
-        fileSection.style.display = 'block';
+    } else {
+        urlInput.style.display = 'none';
+        fileInput.style.display = 'block';
         urlInput.value = '';
     }
 }
 
-// ============ UI FUNCTIONS ============
+async function handleEditImageUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+        showMessage('❌ Veuillez sélectionner une image valide', 'error');
+        return;
+    }
+
+    try {
+        showMessage('⏳ Compression de l\'image en cours...', 'success');
+        const base64Image = await compressImageToBase64(file);
+
+        document.getElementById('editProductImageUrl').value = base64Image;
+        const preview = document.getElementById('editProductPreview');
+        if (preview) {
+            preview.src = base64Image;
+            preview.style.display = 'block';
+        }
+
+        showMessage('✅ Image compressée avec succès!', 'success');
+    } catch (error) {
+        showMessage('❌ Erreur: ' + error, 'error');
+        event.target.value = '';
+    }
+}
+
 function loadProducts() {
     const products = pm.getAll();
     const container = document.getElementById('productsContainer');
@@ -494,7 +408,7 @@ function loadProducts() {
 function createProductCard(product) {
     const card = document.createElement('div');
     card.className = 'product-card';
-    
+
     let featured = '';
     if (product.isFeatured) {
         featured = '<div class="featured-badge">EN VEDETTE</div>';
@@ -534,9 +448,18 @@ function editProduct(id) {
     document.getElementById('editProductWeight').value = product.weight;
     document.getElementById('editProductDimensions').value = product.dimensions;
     document.getElementById('editProductStock').value = product.stock;
-    document.getElementById('editProductImage').value = product.image;
+    document.getElementById('editProductImageUrl').value = product.image;
     document.getElementById('editProductDescription').value = product.description;
     document.getElementById('editProductFeatured').checked = product.isFeatured;
+
+    // Preview image
+    if (product.image) {
+        const preview = document.getElementById('editProductPreview');
+        if (preview) {
+            preview.src = product.image;
+            preview.style.display = 'block';
+        }
+    }
 
     const modal = new bootstrap.Modal(document.getElementById('editModal'));
     modal.show();
@@ -544,8 +467,7 @@ function editProduct(id) {
 
 function saveEditedProduct() {
     const id = parseInt(document.getElementById('editProductId').value);
-    const imageValue = document.getElementById('editProductImage').value;
-    const imageUrl = getImageData(imageValue); // Résoudre l'image
+    const imageUrl = document.getElementById('editProductImageUrl').value;
 
     const updatedProduct = {
         name: document.getElementById('editProductName').value,
@@ -557,6 +479,7 @@ function saveEditedProduct() {
         dimensions: document.getElementById('editProductDimensions').value,
         stock: parseInt(document.getElementById('editProductStock').value),
         image: imageUrl,
+        images: [imageUrl],
         description: document.getElementById('editProductDescription').value,
         isFeatured: document.getElementById('editProductFeatured').checked
     };
@@ -566,27 +489,25 @@ function saveEditedProduct() {
         loadProducts();
         bootstrap.Modal.getInstance(document.getElementById('editModal')).hide();
     } else {
-        showMessage('Erreur lors de la mise à jour', 'danger');
+        showMessage('Erreur lors de la mise à jour', 'error');
     }
 }
 
 function deleteProduct(id) {
     if (confirm('Êtes-vous sûr de vouloir supprimer ce produit ?')) {
         pm.delete(id);
-        showMessage('Produit supprimé avec succès!', 'success');
+        showMessage('✅ Produit supprimé avec succès!', 'success');
         loadProducts();
     }
 }
 
-// ============ FORM HANDLING ============
 document.addEventListener('DOMContentLoaded', function() {
     checkAuth();
 
     document.getElementById('productForm').addEventListener('submit', function(e) {
         e.preventDefault();
 
-        const imageValue = document.getElementById('productImage').value;
-        const imageUrl = getImageData(imageValue); // Résoudre l'image
+        const imageUrl = document.getElementById('productImageUrl').value;
 
         const newProduct = {
             name: document.getElementById('productName').value,
@@ -611,16 +532,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// ============ UTILITY FUNCTIONS ============
-// Résoudre l'image (ID uploadée ou URL directe)
-function getImageData(imageValue) {
-    if (imageValue.startsWith('img_')) {
-        const img = imgManager.getById(imageValue);
-        return img ? img.data : imageValue;
-    }
-    return imageValue;
-}
-
 function formatPrice(price) {
     return new Intl.NumberFormat('fr-FR', {
         style: 'currency',
@@ -638,12 +549,12 @@ function showMessage(message, type) {
         successMsg.textContent = message;
         successMsg.style.display = 'block';
         errorMsg.style.display = 'none';
-        setTimeout(() => successMsg.style.display = 'none', 3000);
+        setTimeout(() => successMsg.style.display = 'none', 4000);
     } else {
         errorMsg.textContent = message;
         errorMsg.style.display = 'block';
         successMsg.style.display = 'none';
-        setTimeout(() => errorMsg.style.display = 'none', 3000);
+        setTimeout(() => errorMsg.style.display = 'none', 4000);
     }
 }
 
@@ -656,14 +567,14 @@ function downloadData() {
     link.href = url;
     link.download = 'produits-kesiara.json';
     link.click();
-    showMessage('Données téléchargées avec succès!', 'success');
+    showMessage('✅ Données téléchargées avec succès!', 'success');
 }
 
 function resetProducts() {
-    if (confirm('Êtes-vous SÛR ? Cela supprimera tous vos produits personnalisés et réinitialisera à la liste par défaut.')) {
+    if (confirm('Êtes-vous SÛR ? Cela supprimera tous vos produits.')) {
         pm.reset();
         loadProducts();
-        showMessage('Produits réinitialisés!', 'success');
+        showMessage('✅ Produits réinitialisés!', 'success');
     }
 }
 
@@ -672,344 +583,25 @@ function changePassword() {
     const confirmPassword = document.getElementById('confirmPassword')?.value;
 
     if (newPassword.trim() === '') {
-        showMessage('Veuillez entrer un nouveau mot de passe', 'danger');
+        showMessage('❌ Veuillez entrer un nouveau mot de passe', 'error');
         return;
     }
 
     if (newPassword.length < 4) {
-        showMessage('Le mot de passe doit contenir au moins 4 caractères', 'danger');
+        showMessage('❌ Le mot de passe doit contenir au moins 4 caractères', 'error');
         return;
     }
 
     if (confirmPassword && newPassword !== confirmPassword) {
-        showMessage('Les mots de passe ne correspondent pas', 'danger');
+        showMessage('❌ Les mots de passe ne correspondent pas', 'error');
         return;
     }
 
     if (auth.setPassword(newPassword)) {
-        showMessage('Mot de passe changé avec succès! ✅', 'success');
+        showMessage('✅ Mot de passe changé avec succès!', 'success');
         document.getElementById('newPassword').value = '';
         if (document.getElementById('confirmPassword')) {
             document.getElementById('confirmPassword').value = '';
         }
     }
 }
-
-// ============ CONFIGURATION FUNCTIONS ============
-
-function loadConfigUI() {
-    try {
-        const config = configManager.getConfig();
-        
-        // Helper function to safely set value
-        const setValue = (id, value) => {
-            const el = document.getElementById(id);
-            if (el) el.value = value || '';
-        };
-        
-        // Helper function to safely set image preview
-        const setImagePreview = (id, previewId, src) => {
-            const el = document.getElementById(id);
-            if (el) el.value = src || '';
-            if (src && previewId) {
-                const preview = document.getElementById(previewId);
-                if (preview) {
-                    preview.src = src;
-                    preview.style.display = 'block';
-                }
-            }
-        };
-        
-        // WhatsApp & Contact
-        setValue('whatsappNumber', config.whatsappNumber);
-        setValue('whatsappMessage', config.whatsappMessage);
-        setValue('phone', config.phone);
-        setValue('email', config.email);
-        
-        // Taxes
-        setValue('taxRate', config.taxRate || 18);
-        setValue('shippingInfo', config.shippingInfo);
-        setValue('deliveryTime', config.deliveryTime);
-        
-        // Texte
-        setValue('siteName', config.siteName);
-        setValue('siteTagline', config.siteTagline);
-        setValue('homepageTitle', config.homepageTitle);
-        setValue('homepageSubtitle', config.homepageSubtitle);
-        
-        // Logo & Branding
-        setImagePreview('logo', 'logoPreview', config.logo);
-        setValue('address', config.address);
-        
-        console.log('Config UI loaded successfully', config);
-    } catch (e) {
-        console.error('Erreur lors du chargement de la config UI:', e);
-    }
-}
-
-function saveContactConfig() {
-    const updates = {
-        whatsappNumber: document.getElementById('whatsappNumber').value,
-        whatsappMessage: document.getElementById('whatsappMessage').value,
-        phone: document.getElementById('phone').value,
-        email: document.getElementById('email').value,
-    };
-    
-    configManager.updateMultiple(updates);
-    showMessage('Configuration WhatsApp & Contact mise à jour! ✅', 'success');
-}
-
-function saveTaxConfig() {
-    const updates = {
-        taxRate: parseInt(document.getElementById('taxRate').value) || 18,
-        shippingInfo: document.getElementById('shippingInfo').value,
-        deliveryTime: document.getElementById('deliveryTime').value,
-    };
-    
-    configManager.updateMultiple(updates);
-    showMessage('Configuration Taxes & Livraison mise à jour! ✅', 'success');
-}
-
-
-function saveTextConfig() {
-    const updates = {
-        siteName: document.getElementById('siteName').value,
-        siteTagline: document.getElementById('siteTagline').value,
-        homepageTitle: document.getElementById('homepageTitle').value,
-        homepageSubtitle: document.getElementById('homepageSubtitle').value,
-    };
-    
-    configManager.updateMultiple(updates);
-    showMessage('Textes du site mis à jour! ✅ (Rafraîchissez le site pour voir les changements)', 'success');
-}
-
-// ============ LOGO UPLOAD FUNCTIONS ============
-function switchLogoMode(mode) {
-    const urlSection = document.getElementById('logoUrlSection');
-    const fileSection = document.getElementById('logoFileSection');
-    const fileInput = document.getElementById('logoImageFile');
-    const logoInput = document.getElementById('logo');
-
-    if (mode === 'url') {
-        urlSection.style.display = 'block';
-        fileSection.style.display = 'none';
-        fileInput.value = '';
-    } else {
-        urlSection.style.display = 'none';
-        fileSection.style.display = 'block';
-        logoInput.value = '';
-    }
-
-    // Update button states
-    const buttons = event.currentTarget.parentElement.querySelectorAll('.image-tab-btn');
-    buttons.forEach(btn => btn.classList.remove('active'));
-    event.currentTarget.classList.add('active');
-}
-
-function handleLogoUpload(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        // Convertir en base64 pour localStorage
-        const base64Image = e.target.result;
-        document.getElementById('logo').value = base64Image;
-        
-        // Prévisualiser
-        const preview = document.getElementById('logoPreview');
-        if (preview) {
-            preview.src = base64Image;
-            preview.style.display = 'block';
-        }
-    };
-    reader.readAsDataURL(file);
-}
-
-function saveBrandConfig() {
-    const logoUrl = document.getElementById('logo').value;
-    const updates = {
-        logo: logoUrl,
-        address: document.getElementById('address').value,
-    };
-    
-    configManager.updateMultiple(updates);
-    
-    // Prévisualiser
-    if (logoUrl) {
-        document.getElementById('logoPreview').src = logoUrl;
-        document.getElementById('logoPreview').style.display = 'block';
-    }
-    
-    showMessage('Logo & Branding mis à jour! ✅ (Rafraîchissez le site pour voir les changements)', 'success');
-}
-
-// ============ IMAGE GALLERY ============
-let currentImageTargetId = null;
-
-function openImageGallery(targetId) {
-    currentImageTargetId = targetId;
-    
-    const galleryGrid = document.getElementById('galleryGrid');
-    galleryGrid.innerHTML = '';
-    
-    // Afficher les images uploadées d'abord
-    const userImages = imgManager.getAll();
-    
-    if (userImages.length > 0) {
-        // Titre section images uploadées
-        const userSection = document.createElement('div');
-        userSection.className = 'col-12 mb-3';
-        userSection.innerHTML = '<h6 style="color: #C9A961; border-bottom: 2px solid #C9A961; padding-bottom: 10px;">📁 Mes Images Uploadées</h6>';
-        galleryGrid.appendChild(userSection);
-
-        userImages.forEach(img => {
-            const col = document.createElement('div');
-            col.className = 'col-md-4 col-sm-6';
-            col.innerHTML = `
-                <div class="gallery-item" style="cursor: pointer; border: 2px solid #C9A961; border-radius: 8px; overflow: hidden; height: 150px; position: relative;">
-                    <img src="${img.data}" alt="User" style="width: 100%; height: 100%; object-fit: cover;"
-                         onclick="selectGalleryImage('${img.id}')" title="Cliquez pour sélectionner">
-                    <small style="position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.7); color: white; padding: 5px; font-size: 10px;">${img.name}</small>
-                </div>
-            `;
-            galleryGrid.appendChild(col);
-        });
-    } else {
-        // Message si aucune image uploadée
-        const noImageSection = document.createElement('div');
-        noImageSection.className = 'col-12 mb-3';
-        noImageSection.innerHTML = `
-            <div style="padding: 40px; text-align: center; background: #f8f8f8; border-radius: 8px; border: 2px dashed #ddd;">
-                <i class="fas fa-images" style="font-size: 48px; color: #C9A961; margin-bottom: 15px;"></i>
-                <h6 style="color: #666;">Aucune image uploadée</h6>
-                <p style="color: #999; font-size: 12px;">Allez dans l'onglet "🖼️ Mes Images" pour uploader vos images</p>
-            </div>
-        `;
-        galleryGrid.appendChild(noImageSection);
-        return; // Ne pas afficher les images Unsplash si aucune image uploadée
-    }
-    
-    // Note: Section Unsplash supprimée pour privilégier l'upload local
-    
-    const modal = new bootstrap.Modal(document.getElementById('galleryModal'));
-    modal.show();
-}
-
-function selectGalleryImage(imageValue) {
-    if (currentImageTargetId) {
-        // Vérifier si c'est un ID d'image uploadée
-        if (imageValue.startsWith('img_')) {
-            const img = imgManager.getById(imageValue);
-            if (img) {
-                document.getElementById(currentImageTargetId).value = imageValue;
-                
-                // Afficher l'aperçu
-                const previewId = currentImageTargetId.includes('edit') ? 'editProductPreview' : 'productPreview';
-                const previewEl = document.getElementById(previewId);
-                if (previewEl) {
-                    previewEl.src = img.data;
-                    previewEl.style.display = 'block';
-                }
-            }
-        } else {
-            // C'est une URL Unsplash
-            document.getElementById(currentImageTargetId).value = imageValue;
-            
-            // Afficher l'aperçu
-            const previewId = currentImageTargetId.includes('edit') ? 'editProductPreview' : 'productPreview';
-            const previewEl = document.getElementById(previewId);
-            if (previewEl) {
-                previewEl.src = imageValue;
-                previewEl.style.display = 'block';
-            }
-        }
-        
-        // Fermer la modal
-        const modal = bootstrap.Modal.getInstance(document.getElementById('galleryModal'));
-        if (modal) modal.hide();
-        
-        showMessage('✅ Image sélectionnée!', 'success');
-    }
-}
-
-// ============ GALLERY MANAGEMENT ============
-function uploadGalleryImage() {
-    const fileInput = document.getElementById('galleryImageFile');
-    const file = fileInput.files[0];
-    
-    if (!file) {
-        showMessage('❌ Veuillez sélectionner une image', 'error');
-        return;
-    }
-
-    document.getElementById('uploadProgress').style.display = 'block';
-    
-    imgManager.addImage(file).then(result => {
-        document.getElementById('uploadProgress').style.display = 'none';
-        fileInput.value = '';
-        showMessage('✅ Image uploadée avec succès! (' + Math.round(result.data.length / 1024) + 'KB)', 'success');
-        loadGalleryImages();
-    }).catch(error => {
-        document.getElementById('uploadProgress').style.display = 'none';
-        showMessage('❌ Erreur: ' + error, 'error');
-    });
-}
-
-function loadGalleryImages() {
-    const gallery = document.getElementById('imagesGallery');
-    const noImagesMsg = document.getElementById('noImagesMsg');
-    const images = imgManager.getAll();
-    
-    gallery.innerHTML = '';
-    
-    if (images.length === 0) {
-        noImagesMsg.style.display = 'block';
-        return;
-    }
-    
-    noImagesMsg.style.display = 'none';
-    
-    images.forEach(img => {
-        const imageCard = document.createElement('div');
-        imageCard.className = 'col-md-4 col-sm-6';
-        imageCard.innerHTML = `
-            <div style="border: 2px solid #C9A961; border-radius: 8px; overflow: hidden; background: #f8f8f8;">
-                <img src="${img.data}" alt="${img.name}" style="width: 100%; height: 200px; object-fit: cover;">
-                <div style="padding: 10px; border-top: 1px solid #ddd;">
-                    <p style="margin: 0; font-size: 12px; color: #333; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                        <strong>${img.name}</strong>
-                    </p>
-                    <small style="color: #999; display: block; margin-top: 5px;">${img.date}</small>
-                    <button class="btn btn-sm btn-danger mt-2" style="width: 100%;" onclick="deleteGalleryImage('${img.id}')">
-                        <i class="fas fa-trash"></i> Supprimer
-                    </button>
-                </div>
-            </div>
-        `;
-        gallery.appendChild(imageCard);
-    });
-}
-
-function deleteGalleryImage(imageId) {
-    if (confirm('Êtes-vous sûr de vouloir supprimer cette image ?')) {
-        imgManager.deleteImage(imageId);
-        showMessage('✅ Image supprimée!', 'success');
-        loadGalleryImages();
-    }
-}
-
-// Charger les images au démarrage
-document.addEventListener('DOMContentLoaded', function() {
-    // Le reste du DOMContentLoaded est au-dessus...
-    // Ajouter le chargement des images après l'authentification
-});
-
-// Charger les images quand on change d'onglet vers imagesTab
-document.addEventListener('shown.bs.tab', function(event) {
-    if (event.target.getAttribute('href') === '#imagesTab') {
-        loadGalleryImages();
-    }
-});
-
-

@@ -256,43 +256,93 @@ const cartManager = new CartManager();
 function initializeSiteFromConfig() {
     try {
         const config = configManager.getConfig();
-        
+
         // Update title
         document.title = config.siteName || 'Kesiara Golden - Bijoux Luxe';
-        
+
         // Update navbar brand
         const navbarBrand = document.querySelector('.navbar-brand');
         if (navbarBrand) navbarBrand.textContent = config.siteName || 'KESIARA GOLDEN';
-        
-        // Update hero title and subtitle
-        const heroTitle = document.querySelector('.hero h1');
-        if (heroTitle) heroTitle.textContent = config.homepageTitle || 'KESIARA GOLDEN';
-        
-        const heroSubtitle = document.querySelector('.hero p');
-        if (heroSubtitle) heroSubtitle.textContent = config.homepageSubtitle || 'Bijoux d\'exception en or massif';
-        
+
         // Update logo in navbar
-        const navbarLogo = document.querySelector('.navbar-logo');
+        const navbarLogo = document.querySelector('.logo-nav');
         if (navbarLogo && config.logo) {
             navbarLogo.src = config.logo;
         }
-        
-        // Update footer brand
+
+        // Update hero section
+        const heroSection = document.querySelector('.hero');
+        if (heroSection && config.heroImage) {
+            heroSection.style.background = `linear-gradient(rgba(26, 26, 26, 0.35), rgba(26, 26, 26, 0.35)), url('${config.heroImage}') center/cover no-repeat`;
+        }
+
+        const heroTitle = document.querySelector('.hero h1');
+        if (heroTitle) heroTitle.textContent = config.heroTitle || 'KESIARA GOLDEN';
+
+        const heroSubtitle = document.querySelector('.hero p');
+        if (heroSubtitle) heroSubtitle.textContent = config.heroSubtitle || 'Bijoux d\'exception en or massif';
+
+        // Update About section
+        const aboutTitle = document.querySelector('.section-title');
+        if (aboutTitle && aboutTitle.textContent.includes('PROPOS')) {
+            aboutTitle.textContent = config.aboutTitle || 'À PROPOS';
+        }
+
+        const aboutParagraphs = document.querySelectorAll('section[style*="background: #f8f8f8"] p');
+        if (aboutParagraphs.length >= 2) {
+            if (config.aboutText1) aboutParagraphs[0].textContent = config.aboutText1;
+            if (config.aboutText2) aboutParagraphs[1].textContent = config.aboutText2;
+        }
+
+        const aboutImage = document.querySelector('section[style*="background: #f8f8f8"] img');
+        if (aboutImage && config.aboutImage) {
+            aboutImage.src = config.aboutImage;
+        }
+
+        // Update Contact section - WhatsApp
+        const whatsappLinks = document.querySelectorAll('a[href*="wa.me"]');
+        whatsappLinks.forEach(link => {
+            if (config.whatsappNumber) {
+                const currentHref = link.getAttribute('href');
+                const hasText = currentHref.includes('?text=');
+                if (hasText) {
+                    const textPart = currentHref.split('?text=')[1];
+                    link.href = `https://wa.me/${config.whatsappNumber}?text=${textPart}`;
+                } else {
+                    link.href = `https://wa.me/${config.whatsappNumber}`;
+                }
+
+                // Update displayed number if it's text content
+                if (link.textContent.includes('+')) {
+                    link.textContent = config.phone || `+${config.whatsappNumber}`;
+                }
+            }
+        });
+
+        // Update Contact section - Location
+        const locationText = document.querySelector('.fas.fa-map-marker-alt');
+        if (locationText && locationText.nextElementSibling && locationText.nextElementSibling.nextElementSibling) {
+            const locationP = locationText.parentElement.querySelector('p');
+            if (locationP && config.address) {
+                locationP.textContent = config.address;
+            }
+        }
+
+        // Update footer
         const footerBrand = document.querySelector('footer h3');
         if (footerBrand) footerBrand.textContent = config.siteName || 'KESIARA GOLDEN';
-        
-        // Update footer copyright
-        const footerCopyright = document.querySelector('footer p');
+
+        const footerCopyright = document.querySelector('.footer-bottom p');
         if (footerCopyright) {
             footerCopyright.textContent = `© 2025 ${config.siteName || 'Kesiara Golden'}. Tous droits réservés.`;
         }
-        
-        // Update WhatsApp number in hero
-        const heroWhatsAppBtn = document.querySelector('.hero a[href*="wa.me"]');
-        if (heroWhatsAppBtn && config.whatsappNumber) {
-            const message = encodeURIComponent('Bonjour, j\'aimerais commander');
-            heroWhatsAppBtn.href = `https://wa.me/${config.whatsappNumber}?text=${message}`;
+
+        const footerWhatsApp = document.querySelector('footer a[href*="wa.me"]');
+        if (footerWhatsApp && config.whatsappNumber && config.phone) {
+            footerWhatsApp.href = `https://wa.me/${config.whatsappNumber}`;
+            footerWhatsApp.textContent = `WhatsApp: ${config.phone}`;
         }
+
     } catch (e) {
         console.error('Erreur lors de l\'initialisation de la configuration:', e);
     }
